@@ -3,102 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SempoaAR - Kursus Sempoa dengan Teknologi Augmented Reality</title>
+    <title>EonGenesis.id - Kursus Sempoa dengan Teknologi AR</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4e73df;
-            --secondary: #f8f9fc;
-            --accent: #36b9cc;
-            --dark: #2e59d9;
-            --light: #ffffff;
+            --nude: #E8D6C0;
+            --brown: #8B5A2B;
+            --dark-brown: #4A2C2A;
+            --light-brown: #C4A586;
+            --earth: #A86F4C;
+            --cream: #F8F4E9;
         }
         
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #f8f9fc;
+            background-color: var(--cream);
+            color: var(--dark-brown);
+        }
+        
+        .brand-font {
+            font-family: 'Playfair Display', serif;
         }
         
         .navbar {
+            background-color: var(--dark-brown);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--nude) !important;
+        }
+        
         .hero-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
-            color: white;
+            background: linear-gradient(135deg, var(--dark-brown) 0%, var(--earth) 100%);
+            color: var(--cream);
             padding: 100px 0;
             margin-bottom: 50px;
         }
         
         .card {
             border-radius: 10px;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(90, 70, 50, 0.15);
             transition: transform 0.3s;
             margin-bottom: 20px;
+            border: none;
+            background-color: var(--cream);
         }
         
         .card:hover {
             transform: translateY(-5px);
         }
         
+        .btn-primary {
+            background-color: var(--brown);
+            border-color: var(--brown);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-brown);
+            border-color: var(--dark-brown);
+        }
+        
+        .btn-outline-primary {
+            color: var(--brown);
+            border-color: var(--brown);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--brown);
+            color: white;
+        }
+        
         .section-title {
             position: relative;
             padding-bottom: 15px;
             margin-bottom: 30px;
-            text-align: center;
+            color: var(--dark-brown);
         }
         
         .section-title:after {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
             width: 80px;
             height: 3px;
-            background-color: var(--primary);
+            background-color: var(--brown);
         }
         
         .ar-badge {
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: var(--accent);
+            background-color: var(--earth);
             color: white;
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 12px;
         }
         
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--dark);
-            border-color: var(--dark);
-        }
-        
-        footer {
-            background-color: #2e59d9;
-            color: white;
-            padding: 40px 0;
-        }
-        
         .feature-icon {
             font-size: 2.5rem;
-            color: var(--primary);
+            color: var(--brown);
             margin-bottom: 15px;
         }
         
-        .progress-bar {
-            background-color: var(--primary);
+        footer {
+            background-color: var(--dark-brown);
+            color: var(--nude);
+            padding: 40px 0;
         }
         
         .dashboard-card {
             height: 100%;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--brown);
+        }
+        
+        .nav-pills .nav-link {
+            color: var(--dark-brown);
+        }
+        
+        .progress-bar {
+            background-color: var(--brown);
+        }
+        
+        .trial-counter {
+            background-color: var(--light-brown);
+            color: var(--dark-brown);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .trial-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--dark-brown);
+        }
+        
+        .product-card {
+            border-left: 4px solid var(--brown);
         }
         
         @media (max-width: 768px) {
@@ -110,10 +162,10 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-abacus me-2"></i>Sempoa<span class="text-warning">AR</span>
+            <a class="navbar-brand brand-font" href="#">
+                <i class="fas fa-seedling me-2"></i>EonGenesis.id
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -121,249 +173,396 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <a class="nav-link active" href="#" data-bs-target="home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#katalog">Katalog Kursus</a>
+                        <a class="nav-link" href="#" data-bs-target="profile">Profil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#tentang">Tentang Kami</a>
+                        <a class="nav-link" href="#" data-bs-target="products">Produk</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+                        <a class="nav-link" href="#" data-bs-target="catalog">Katalog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="trial">Free Trial</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://wa.me/628123456789" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold">Kursus Sempoa Modern dengan Teknologi AR</h1>
-                    <p class="lead">Tingkatkan kemampuan berhitung dengan metode sempoa yang dipadukan dengan teknologi Augmented Reality untuk pengalaman belajar yang interaktif.</p>
-                    <a href="#katalog" class="btn btn-light btn-lg mt-3">Lihat Kursus <i class="fas fa-arrow-right ms-2"></i></a>
-                </div>
-                <div class="col-lg-6 d-none d-lg-block">
-                    <img src="https://images.unsplash.com/photo-1585432959449-b1c9c8cc49ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded shadow" alt="Sempoa AR">
+    <!-- Main Content Sections -->
+    <div class="container my-5">
+        <!-- Home Section -->
+        <section id="home-section" class="content-section">
+            <!-- Hero Section -->
+            <div class="hero-section rounded">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <h1 class="display-4 fw-bold brand-font">Kursus Sempoa Modern dengan Teknologi AR</h1>
+                            <p class="lead">Tingkatkan kemampuan berhitung dengan metode sempoa yang dipadukan dengan teknologi Augmented Reality untuk pengalaman belajar yang interaktif.</p>
+                            <button class="btn btn-light btn-lg mt-3" data-bs-target="trial">Coba Free Trial <i class="fas fa-arrow-right ms-2"></i></button>
+                        </div>
+                        <div class="col-lg-6 d-none d-lg-block">
+                            <img src="https://images.unsplash.com/photo-1585432959449-b1c9c8cc49ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded shadow" alt="Sempoa AR">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="py-5">
-        <div class="container">
-            <h2 class="section-title">Mengapa Memilih SempoaAR?</h2>
-            <div class="row">
-                <div class="col-md-4 text-center mb-4">
-                    <div class="feature-icon">
-                        <i class="fas fa-vr-cardboard"></i>
+            <!-- Features Section -->
+            <div class="py-5">
+                <div class="container">
+                    <h2 class="section-title text-center">Mengapa Memilih EonGenesis.id?</h2>
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="feature-icon">
+                                <i class="fas fa-vr-cardboard"></i>
+                            </div>
+                            <h4>Teknologi AR</h4>
+                            <p>Belajar sempoa dengan Augmented Reality untuk pengalaman interaktif yang menyenangkan.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="feature-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h4>Instruktur Berpengalaman</h4>
+                            <p>Diajar oleh instruktur profesional yang telah bersertifikat dan berpengalaman dalam mengajar sempoa.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="feature-icon">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                            <h4>Sertifikat Resmi</h4>
+                            <p>Dapatkan sertifikat resmi setelah menyelesaikan kursus yang dapat meningkatkan nilai akademis.</p>
+                        </div>
                     </div>
-                    <h4>Teknologi AR</h4>
-                    <p>Belajar sempoa dengan Augmented Reality untuk pengalaman interaktif yang menyenangkan.</p>
-                </div>
-                <div class="col-md-4 text-center mb-4">
-                    <div class="feature-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h4>Instruktur Berpengalaman</h4>
-                    <p>Diajar oleh instruktur profesional yang telah bersertifikat dan berpengalaman dalam mengajar sempoa.</p>
-                </div>
-                <div class="col-md-4 text-center mb-4">
-                    <div class="feature-icon">
-                        <i class="fas fa-certificate"></i>
-                    </div>
-                    <h4>Sertifikat Resmi</h4>
-                    <p>Dapatkan sertifikat resmi setelah menyelesaikan kursus yang dapat meningkatkan nilai akademis.</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Courses Catalog -->
-    <section id="katalog" class="py-5 bg-light">
-        <div class="container">
-            <h2 class="section-title">Katalog Kursus</h2>
+        <!-- Profile Section -->
+        <section id="profile-section" class="content-section d-none">
             <div class="row">
-                <!-- Course 1 -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <span class="ar-badge">AR Available</span>
-                        <img src="https://images.unsplash.com/photo-1596496050827-829a9148575e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Kursus Dasar Sempoa">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="section-title text-center">Profil Perusahaan</h2>
+                    <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">Kursus Dasar Sempoa</h5>
+                            <div class="text-center mb-4">
+                                <i class="fas fa-seedling fa-3x mb-3" style="color: var(--brown);"></i>
+                                <h3 class="brand-font">EonGenesis.id</h3>
+                                <p class="lead">Revolusi Belajar Sempoa dengan Teknologi Modern</p>
+                            </div>
+                            
+                            <h4>Visi</h4>
+                            <p>Menjadi platform edukasi sempoa terdepan yang memanfaatkan teknologi Augmented Reality untuk menciptakan pengalaman belajar yang menyenangkan dan efektif.</p>
+                            
+                            <h4>Misi</h4>
+                            <ul>
+                                <li>Menyediakan kurikulum sempoa yang komprehensif dan mudah dipahami</li>
+                                <li>Mengintegrasikan teknologi AR untuk meningkatkan engagement pembelajaran</li>
+                                <li>Menjangkau lebih banyak pelajar di seluruh Indonesia melalui platform digital</li>
+                                <li>Melatih instruktur berkualitas untuk mendampingi proses belajar siswa</li>
+                            </ul>
+                            
+                            <h4>Metode Pembelajaran</h4>
+                            <p>Kami menggabungkan metode sempoa tradisional dengan teknologi modern seperti Augmented Reality, video interaktif, dan platform digital untuk menciptakan pengalaman belajar yang unik dan efektif.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products-section" class="content-section d-none">
+            <h2 class="section-title">Produk & Layanan</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card product-card">
+                        <div class="card-body">
+                            <h4 class="card-title">Kursus Dasar Sempoa</h4>
+                            <p class="text-primary fw-bold">Rp 499.000</p>
                             <p class="card-text">Pelajari dasar-dasar sempoa untuk anak usia 5-8 tahun. Mulai dari pengenalan hingga operasi dasar.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-bold text-primary">Rp 499.000</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Detail</a>
-                            </div>
+                            <ul>
+                                <li>12 modul pembelajaran</li>
+                                <li>Akses ke platform AR</li>
+                                <li>4 sesi konsultasi dengan instruktur</li>
+                                <li>Sertifikat penyelesaian</li>
+                            </ul>
+                            <button class="btn btn-primary">Daftar Sekarang</button>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Course 2 -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <span class="ar-badge">AR Available</span>
-                        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Kursus Menengah Sempoa">
+                <div class="col-md-6">
+                    <div class="card product-card">
                         <div class="card-body">
-                            <h5 class="card-title">Kursus Menengah Sempoa</h5>
+                            <h4 class="card-title">Kursus Menengah Sempoa</h4>
+                            <p class="text-primary fw-bold">Rp 699.000</p>
                             <p class="card-text">Tingkatkan kemampuan berhitung dengan operasi yang lebih kompleks untuk anak usia 9-12 tahun.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-bold text-primary">Rp 699.000</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Detail</a>
-                            </div>
+                            <ul>
+                                <li>16 modul pembelajaran</li>
+                                <li>Akses penuh ke platform AR</li>
+                                <li>6 sesi konsultasi dengan instruktur</li>
+                                <li>Sertifikat penyelesaian</li>
+                                <li>Kompetisi bulanan</li>
+                            </ul>
+                            <button class="btn btn-primary">Daftar Sekarang</button>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Course 3 -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="https://images.unsplash.com/photo-1516542076529-1ea3854896f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Kursus Lanjutan Sempoa">
+                <div class="col-md-6">
+                    <div class="card product-card">
                         <div class="card-body">
-                            <h5 class="card-title">Kursus Lanjutan Sempoa</h5>
+                            <h4 class="card-title">Kursus Lanjutan Sempoa</h4>
+                            <p class="text-primary fw-bold">Rp 899.000</p>
                             <p class="card-text">Kuasai teknik berhitung cepat dengan sempoa tingkat lanjut untuk remaja usia 13-17 tahun.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-bold text-primary">Rp 899.000</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Detail</a>
+                            <ul>
+                                <li>20 modul pembelajaran</li>
+                                <li>Akses premium ke platform AR</li>
+                                <li>8 sesi konsultasi dengan instruktur</li>
+                                <li>Sertifikat penyelesaian bersertifikat</li>
+                                <li>Kompetisi nasional</li>
+                            </ul>
+                            <button class="btn btn-primary">Daftar Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card product-card">
+                        <div class="card-body">
+                            <h4 class="card-title">Paket Keluarga</h4>
+                            <p class="text-primary fw-bold">Rp 1.499.000</p>
+                            <p class="card-text">Kursus sempoa untuk 3 anggota keluarga dengan diskon khusus.</p>
+                            <ul>
+                                <li>Akses ke semua level kursus</li>
+                                <li>Akses keluarga ke platform AR</li>
+                                <li>12 sesi konsultasi dengan instruktur</li>
+                                <li>Sertifikat untuk setiap anggota</li>
+                                <li>Bimbingan karir dalam edukasi sempoa</li>
+                            </ul>
+                            <button class="btn btn-primary">Daftar Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catalog Section -->
+        <section id="catalog-section" class="content-section d-none">
+            <h2 class="section-title">Katalog Kursus</h2>
+            
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-brown text-white">
+                            <h5 class="mb-0"><i class="fas fa-book me-2"></i>Materi Pembelajaran</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-video fa-2x mb-3" style="color: var(--brown);"></i>
+                                            <h5>Video Pembelajaran</h5>
+                                            <p>Video interaktif dengan instruktur profesional</p>
+                                            <a href="#" class="btn btn-outline-primary btn-sm">Akses Video</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-file-pdf fa-2x mb-3" style="color: var(--brown);"></i>
+                                            <h5>Materi PDF</h5>
+                                            <p>Modul pembelajaran lengkap dalam format PDF</p>
+                                            <a href="#" class="btn btn-outline-primary btn-sm">Download PDF</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-vr-cardboard fa-2x mb-3" style="color: var(--brown);"></i>
+                                            <h5>Augmented Reality</h5>
+                                            <p>Pengalaman belajar interaktif dengan teknologi AR</p>
+                                            <a href="#" class="btn btn-outline-primary btn-sm">Coba AR</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="text-center mt-4">
-                <a href="#" class="btn btn-primary">Lihat Semua Kursus</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Dashboard Preview -->
-    <section class="py-5">
-        <div class="container">
-            <h2 class="section-title">Pengalaman Belajar Terpadu</h2>
             <div class="row">
-                <div class="col-md-6 mb-4">
-                    <div class="card dashboard-card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0"><i class="fas fa-user-graduate me-2"></i>Dashboard Siswa</h5>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-brown text-white">
+                            <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>Kursus Tersedia</h5>
                         </div>
                         <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <i class="fas fa-video text-primary me-2"></i> Materi Pembelajaran (Video, PDF, AR)
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-book-open text-primary me-2"></i> Modul Belajar Interaktif (PDF, AR)
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-chart-line text-primary me-2"></i> Progress Belajar & Sertifikat
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-tasks text-primary me-2"></i> Latihan & Ujian Online
-                                </li>
-                            </ul>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Kursus</th>
+                                            <th>Level</th>
+                                            <th>Materi</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Dasar Sempoa</td>
+                                            <td><span class="badge bg-primary">Pemula</span></td>
+                                            <td>Video, PDF, AR</td>
+                                            <td><button class="btn btn-sm btn-primary">Akses</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sempoa Menengah</td>
+                                            <td><span class="badge bg-warning text-dark">Menengah</span></td>
+                                            <td>Video, PDF, AR</td>
+                                            <td><button class="btn btn-sm btn-primary">Akses</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sempoa Lanjutan</td>
+                                            <td><span class="badge bg-danger">Lanjutan</span></td>
+                                            <td>Video, PDF, AR</td>
+                                            <td><button class="btn btn-sm btn-primary">Akses</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sempoa Kecepatan</td>
+                                            <td><span class="badge bg-dark">Expert</span></td>
+                                            <td>Video, PDF, AR</td>
+                                            <td><button class="btn btn-sm btn-primary">Akses</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Free Trial Section -->
+        <section id="trial-section" class="content-section d-none">
+            <h2 class="section-title">Free Trial</h2>
+            
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="trial-counter">
+                        <h4>Sisa Percobaan Gratis Anda</h4>
+                        <div class="trial-number">5</div>
+                        <p>kali penggunaan AR Sempoa</p>
+                        <button class="btn btn-primary mt-3">Coba Sekarang</button>
+                    </div>
+                    
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5>Cara Menggunakan</h5>
+                            <ol>
+                                <li>Klik tombol "Coba Sekarang"</li>
+                                <li>Izinkan akses kamera untuk fitur AR</li>
+                                <li>Ikuti instruksi yang muncul di layar</li>
+                                <li>Gunakan jari untuk berinteraksi dengan sempoa virtual</li>
+                            </ol>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-6 mb-4">
-                    <div class="card dashboard-card">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="mb-0"><i class="fas fa-user-cog me-2"></i>Dashboard Admin</h5>
-                        </div>
+                <div class="col-md-7">
+                    <div class="card">
                         <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <i class="fas fa-users-cog text-success me-2"></i> Manajemen User & Siswa
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-book text-success me-2"></i> Manajemen Kursus & Materi
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-chart-pie text-success me-2"></i> Analisis Progress Belajar
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-file-invoice-dollar text-success me-2"></i> Manajemen Pembayaran
-                                </li>
-                            </ul>
+                            <h4>Pengalaman Belajar AR</h4>
+                            <p>Dengan teknologi Augmented Reality, Anda dapat mengalami belajar sempoa secara interaktif. Sempoa virtual akan muncul di dunia nyata melalui kamera perangkat Anda.</p>
+                            
+                            <div class="mb-4">
+                                <h5>Fitur AR Sempoa:</h5>
+                                <ul>
+                                    <li>Interaksi real-time dengan sempoa virtual</li>
+                                    <li>Visualisasi 3D konsep matematika</li>
+                                    <li>Latihan interaktif dengan umpan balik instan</li>
+                                    <li>Gamifikasi untuk meningkatkan motivasi belajar</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="system-requirements">
+                                <h5>Persyaratan Sistem:</h5>
+                                <ul>
+                                    <li>Smartphone atau tablet dengan kamera</li>
+                                    <li>iOS 11+ atau Android 8.0+</li>
+                                    <li>Browser Chrome atau Safari terbaru</li>
+                                    <li>Koneksi internet stabil</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- AR Feature Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h2 class="mb-4">Pengalaman Belajar AR yang Menakjubkan</h2>
-                    <p>Dengan teknologi Augmented Reality, siswa dapat melihat dan berinteraksi dengan sempoa virtual dalam lingkungan 3D. Ini membuat proses belajar lebih menarik dan efektif.</p>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Interaksi real-time dengan sempoa virtual</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Visualisasi 3D konsep matematika</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Gamifikasi untuk meningkatkan motivasi belajar</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Dapat diakses melalui smartphone atau tablet</li>
-                    </ul>
-                </div>
-                <div class="col-lg-6">
-                    <img src="https://images.unsplash.com/photo-1617005082133-548c4dd27f35?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded shadow" alt="AR Experience">
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4">
-                    <h4>Sempoa<span class="text-warning">AR</span></h4>
-                    <p>Mengubah cara belajar sempoa tradisional menjadi pengalaman digital yang interaktif dan menyenangkan dengan teknologi Augmented Reality.</p>
+                    <h4 class="brand-font">EonGenesis.id</h4>
+                    <p>Revolusi belajar sempoa dengan teknologi Augmented Reality untuk pengalaman belajar yang interaktif dan menyenangkan.</p>
                 </div>
                 <div class="col-lg-2 mb-4">
-                    <h5>Quick Links</h5>
+                    <h5>Menu</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Home</a></li>
-                        <li><a href="#katalog" class="text-white">Kursus</a></li>
-                        <li><a href="#" class="text-white">Tentang Kami</a></li>
-                        <li><a href="#" class="text-white">Kontak</a></li>
+                        <li><a href="#" class="text-nude" data-bs-target="home">Home</a></li>
+                        <li><a href="#" class="text-nude" data-bs-target="profile">Profil</a></li>
+                        <li><a href="#" class="text-nude" data-bs-target="products">Produk</a></li>
+                        <li><a href="#" class="text-nude" data-bs-target="catalog">Katalog</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-4">
-                    <h5>Kursus Populer</h5>
+                    <h5>Layanan</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Kursus Dasar Sempoa</a></li>
-                        <li><a href="#" class="text-white">Kursus Menengah Sempoa</a></li>
-                        <li><a href="#" class="text-white">Kursus Lanjutan Sempoa</a></li>
-                        <li><a href="#" class="text-white">Sempoa untuk Dewasa</a></li>
+                        <li><a href="#" class="text-nude">Kursus Dasar</a></li>
+                        <li><a href="#" class="text-nude">Kursus Menengah</a></li>
+                        <li><a href="#" class="text-nude">Kursus Lanjutan</a></li>
+                        <li><a href="#" class="text-nude">Free Trial</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-4">
                     <h5>Kontak Kami</h5>
                     <ul class="list-unstyled">
-                        <li><i class="fas fa-map-marker-alt me-2"></i> Jl. Pendidikan No. 123, Jakarta</li>
-                        <li><i class="fas fa-phone me-2"></i> (021) 1234-5678</li>
-                        <li><i class="fas fa-envelope me-2"></i> info@sempoaar.com</li>
+                        <li><i class="fab fa-whatsapp me-2"></i> <a href="https://wa.me/628123456789" class="text-nude" target="_blank">+62 812-3456-789</a></li>
+                        <li><i class="fas fa-envelope me-2"></i> <a href="mailto:info@eongenesis.id" class="text-nude">info@eongenesis.id</a></li>
+                        <li><i class="fab fa-instagram me-2"></i> <a href="#" class="text-nude">@eongenesis.id</a></li>
                     </ul>
                 </div>
             </div>
             <hr class="mt-0 mb-4">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="mb-0">&copy; 2023 SempoaAR. All rights reserved.</p>
+                    <p class="mb-0">&copy; 2023 EonGenesis.id. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="text-nude me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-nude me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-nude me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-nude"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
@@ -402,5 +601,50 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navigation handling
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.dataset.bsTarget) {
+                    e.preventDefault();
+                    
+                    // Hide all sections
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.add('d-none');
+                    });
+                    
+                    // Show target section
+                    const targetSection = document.getElementById(`${this.dataset.bsTarget}-section`);
+                    if (targetSection) {
+                        targetSection.classList.remove('d-none');
+                    }
+                    
+                    // Update active nav link
+                    document.querySelectorAll('.nav-link').forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Free trial counter
+        let trialCount = 5;
+        document.querySelector('.trial-number').textContent = trialCount;
+        
+        // Simulate AR usage
+        document.querySelector('#trial-section .btn-primary').addEventListener('click', function() {
+            if (trialCount > 0) {
+                trialCount--;
+                document.querySelector('.trial-number').textContent = trialCount;
+                alert('Membuka pengalaman AR... Silakan izinkan akses kamera.');
+                
+                if (trialCount === 0) {
+                    this.disabled = true;
+                    this.textContent = 'Percobaan Habis';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
