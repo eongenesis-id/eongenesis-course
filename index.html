@@ -327,8 +327,40 @@
                 <input type="text" class="login-input" placeholder="Username" required>
                 <input type="password" class="login-input" placeholder="Password" required>
                 <button type="submit" class="btn btn-sm btn-primary">Login</button>
-                <a href="#" class="btn btn-sm btn-outline-primary">Daftar</a>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Daftar</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal Pendaftaran -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">Daftar Akun Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="whatsapp" class="form-label">Nomor WhatsApp</label>
+                            <input type="tel" class="form-control" id="whatsapp" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="submitRegister">Daftar</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -392,15 +424,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- AR Demo Container (hidden by default) -->
-            <div id="arDemoContainer" class="ar-container d-none">
-                <i class="fas fa-vr-cardboard ar-placeholder"></i>
-                <h3>Sempoa AR Interaktif</h3>
-                <p>Gunakan jari Anda untuk berinteraksi dengan sempoa virtual</p>
-                <p>Sisa percobaan: <span id="homeTrialCount">3</span> kali</p>
-                <button class="btn btn-primary mt-3" id="closeArBtn">Tutup AR</button>
             </div>
 
             <!-- Features Section -->
@@ -535,23 +558,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6">
-                    <div class="card product-card">
-                        <div class="card-body">
-                            <h4 class="card-title">Paket Keluarga</h4>
-                            <p class="price-discount">Rp 1.499.000</p>
-                            <p class="card-text">Kursus sempoa untuk 3 anggota keluarga dengan diskon khusus.</p>
-                            <ul>
-                                <li>Akses ke semua level kursus</li>
-                                <li>Akses keluarga ke platform AR</li>
-                                <li>12 sesi konsultasi dengan instruktur</li>
-                                <li>Sertifikat untuk setiap anggota</li>
-                                <li>Bimbingan karir dalam edukasi sempoa</li>
-                            </ul>
-                            <button class="btn btn-primary">Daftar Sekarang</button>
-                        </div>
-                    </div>
-                </div>
+                <!-- Paket Keluarga dihapus sesuai permintaan -->
             </div>
         </section>
 
@@ -583,7 +590,8 @@
                                         <div class="card-body text-center">
                                             <i class="fas fa-file-pdf fa-2x mb-3" style="color: var(--brown);"></i>
                                             <h5>Materi PDF</h5>
-                                            <p class="price-discount">Rp 99.000 / 5 modul</p>
+                                            <!-- Harga diubah menjadi Rp 59.000 / 5 modul -->
+                                            <p class="price-discount">Rp 59.000 / 5 modul</p>
                                             <p>Modul pembelajaran lengkap dalam format PDF</p>
                                             <a href="#" class="btn btn-outline-primary btn-sm">Beli Sekarang</a>
                                         </div>
@@ -662,9 +670,8 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="trial-counter">
-                        <h4>Sisa Percobaan Gratis Anda</h4>
-                        <div class="trial-number">3</div>
-                        <p>kali penggunaan AR Sempoa</p>
+                        <h4>Percobaan Gratis AR Sempoa</h4>
+                        <p>Klik tombol di bawah untuk mencoba pengalaman belajar sempoa dengan teknologi AR</p>
                         <button class="btn btn-primary mt-3" id="trialBtn">Coba Sekarang</button>
                     </div>
                     
@@ -673,7 +680,7 @@
                             <h5>Cara Menggunakan</h5>
                             <ol>
                                 <li>Klik tombol "Coba Sekarang"</li>
-                                <li>Izinkan akses kamera untuk fitur AR</li>
+                                <li>Anda akan diarahkan ke halaman AR Sempoa</li>
                                 <li>Ikuti instruksi yang muncul di layar</li>
                                 <li>Gunakan jari untuk berinteraksi dengan sempoa virtual</li>
                             </ol>
@@ -709,15 +716,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- AR Demo Container (hidden by default) -->
-            <div id="trialArContainer" class="ar-container d-none mt-4">
-                <i class="fas fa-vr-cardboard ar-placeholder"></i>
-                <h3>Sempoa AR Interaktif</h3>
-                <p>Gunakan jari Anda untuk berinteraksi dengan sempoa virtual</p>
-                <p>Sisa percobaan: <span id="trialCount">3</span> kali</p>
-                <button class="btn btn-primary mt-3" id="closeTrialArBtn">Tutup AR</button>
             </div>
         </section>
     </div>
@@ -803,51 +801,46 @@
             });
         });
         
-        // Free trial counter
-        let trialCount = 3;
-        document.querySelector('.trial-number').textContent = trialCount;
-        document.getElementById('trialCount').textContent = trialCount;
-        document.getElementById('homeTrialCount').textContent = trialCount;
-        
-        // AR functionality
+        // Free trial functionality - redirect to AR page
         document.getElementById('trialBtn').addEventListener('click', function() {
-            if (trialCount > 0) {
-                document.getElementById('trialArContainer').classList.remove('d-none');
-                trialCount--;
-                document.getElementById('trialCount').textContent = trialCount;
-                
-                if (trialCount === 0) {
-                    this.disabled = true;
-                    this.textContent = 'Percobaan Habis';
-                }
-            }
+            // Menampilkan pesan error karena link tidak bisa diakses
+            alert('Maaf, halaman free trial sedang dalam pemeliharaan. Silakan coba lagi nanti atau hubungi kami melalui WhatsApp untuk informasi lebih lanjut.');
         });
         
         document.getElementById('homeTrialBtn').addEventListener('click', function() {
-            if (trialCount > 0) {
-                document.getElementById('arDemoContainer').classList.remove('d-none');
-                trialCount--;
-                document.getElementById('homeTrialCount').textContent = trialCount;
-                
-                if (trialCount === 0) {
-                    this.disabled = true;
-                    this.textContent = 'Percobaan Habis';
-                }
-            }
-        });
-        
-        document.getElementById('closeArBtn').addEventListener('click', function() {
-            document.getElementById('arDemoContainer').classList.add('d-none');
-        });
-        
-        document.getElementById('closeTrialArBtn').addEventListener('click', function() {
-            document.getElementById('trialArContainer').classList.add('d-none');
+            // Menampilkan pesan error karena link tidak bisa diakses
+            alert('Maaf, halaman free trial sedang dalam pemeliharaan. Silakan coba lagi nanti atau hubungi kami melalui WhatsApp untuk informasi lebih lanjut.');
         });
         
         // Login form handling
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('Login berhasil! Selamat datang di EonGenesis.id');
+        });
+        
+        // Registration form handling
+        document.getElementById('submitRegister').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            
+            if (!username || !password || !whatsapp) {
+                alert('Harap isi semua field yang diperlukan');
+                return;
+            }
+            
+            // Simpan data pendaftaran (simulasi)
+            localStorage.setItem('registeredUser', JSON.stringify({
+                username: username,
+                password: password,
+                whatsapp: whatsapp
+            }));
+            
+            alert('Pendaftaran berhasil! Silakan login dengan akun Anda.');
+            
+            // Tutup modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+            modal.hide();
         });
         
         // Logo change functionality
