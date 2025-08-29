@@ -299,6 +299,22 @@
             margin-bottom: 15px;
         }
         
+        .trial-modal .modal-content {
+            background-color: var(--cream);
+            border-radius: 15px;
+        }
+        
+        .trial-modal .modal-header {
+            border-bottom: 2px solid var(--brown);
+            background-color: var(--dark-brown);
+            color: var(--nude);
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .trial-modal .btn-close {
+            color: var(--nude);
+        }
+        
         @media (max-width: 768px) {
             .hero-section {
                 padding: 60px 0;
@@ -364,6 +380,38 @@
         </div>
     </div>
 
+    <!-- Modal Free Trial -->
+    <div class="modal fade trial-modal" id="trialModal" tabindex="-1" aria-labelledby="trialModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="trialModalLabel">Akses Free Trial</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-vr-cardboard fa-4x mb-3" style="color: var(--brown);"></i>
+                        <h4>Free Trial AR Sempoa</h4>
+                        <p>Klik tombol di bawah untuk mengakses free trial kami</p>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a href="https://eongenesis-id.github.io/EONGENESIS/" target="_blank" class="btn btn-primary btn-lg">
+                            <i class="fas fa-external-link-alt me-2"></i> Akses Free Trial
+                        </a>
+                    </div>
+                    <div class="mt-4">
+                        <h5>Jika mengalami masalah:</h5>
+                        <ol>
+                            <li>Pastikan koneksi internet Anda stabil</li>
+                            <li>Coba buka link di browser yang berbeda</li>
+                            <li>Hubungi kami jika masalah tetap berlanjut</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
@@ -417,7 +465,7 @@
                         <div class="col-lg-6">
                             <h1 class="display-4 fw-bold brand-font">Kursus Sempoa Modern dengan Teknologi AR</h1>
                             <p class="lead">Tingkatkan kemampuan berhitung dengan metode sempoa yang dipadukan dengan teknologi Augmented Reality untuk pengalaman belajar yang interaktif.</p>
-                            <button class="btn btn-light btn-lg mt-3" id="homeTrialBtn">Coba Free Trial <i class="fas fa-arrow-right ms-2"></i></button>
+                            <button class="btn btn-light btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#trialModal">Coba Free Trial <i class="fas fa-arrow-right ms-2"></i></button>
                         </div>
                         <div class="col-lg-6 d-none d-lg-block">
                             <img src="https://images.unsplash.com/photo-1585432959449-b1c9c8cc49ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded shadow" alt="Sempoa AR">
@@ -672,7 +720,7 @@
                     <div class="trial-counter">
                         <h4>Percobaan Gratis AR Sempoa</h4>
                         <p>Klik tombol di bawah untuk mencoba pengalaman belajar sempoa dengan teknologi AR</p>
-                        <button class="btn btn-primary mt-3" id="trialBtn">Coba Sekarang</button>
+                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#trialModal">Coba Sekarang</button>
                     </div>
                     
                     <div class="card mt-4">
@@ -799,17 +847,6 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
-        });
-        
-        // Free trial functionality - redirect to AR page
-        document.getElementById('trialBtn').addEventListener('click', function() {
-            // Menampilkan pesan error karena link tidak bisa diakses
-            alert('Maaf, halaman free trial sedang dalam pemeliharaan. Silakan coba lagi nanti atau hubungi kami melalui WhatsApp untuk informasi lebih lanjut.');
-        });
-        
-        document.getElementById('homeTrialBtn').addEventListener('click', function() {
-            // Menampilkan pesan error karena link tidak bisa diakses
-            alert('Maaf, halaman free trial sedang dalam pemeliharaan. Silakan coba lagi nanti atau hubungi kami melalui WhatsApp untuk informasi lebih lanjut.');
         });
         
         // Login form handling
