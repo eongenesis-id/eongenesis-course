@@ -393,6 +393,15 @@
             font-weight: bold;
         }
         
+        .paid-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
         .locked-content {
             filter: blur(5px);
             pointer-events: none;
@@ -540,10 +549,10 @@
                             <input type="password" class="form-control" id="password" required>
                         </div>
                         <div class="mb-3">
-                            <label for="whatsapp" class="form-label">Nomor WhatsApp (contoh: 6281234567890)</label>
-                            <input type="tel" class="form-control" id="whatsapp" required maxlength="13">
+                            <label for="whatsapp" class="form-label">Nomor WhatsApp (contoh: 0812345678901)</label>
+                            <input type="tel" class="form-control" id="whatsapp" required maxlength="13" pattern="08[0-9]{9,11}">
                             <div class="form-text text-danger" id="whatsappError" style="display: none;">Nomor WhatsApp sudah terdaftar</div>
-                            <div class="form-text">Pastikan nomor WhatsApp aktif dan benar (maksimal 13 digit)</div>
+                            <div class="form-text">Pastikan nomor WhatsApp aktif dan benar (13 digit, format: 08xxxxxxxxxx)</div>
                         </div>
                         <div class="mb-3" id="affiliateSection" style="display: none;">
                             <label for="affiliateCode" class="form-label">Kode Affiliate (opsional)</label>
@@ -595,7 +604,7 @@
                         <div id="trialPromo" class="trial-promo" style="display: none;">
                             <h5>Free Trial Anda telah habis!</h5>
                             <p>Nikmati akses penuh ke teknologi AR Sempoa dengan membeli paket akses lengkap.</p>
-                            <button class="btn btn-success mt-2" data-product="Akses Link AR" data-price="30000">
+                            <button class="btn btn-success mt-2" id="buyAfterTrial" data-product="Akses Link AR" data-price="30000">
                                 <i class="fas fa-shopping-cart me-2"></i> Beli Akses AR - Rp 30.000
                             </button>
                         </div>
@@ -740,9 +749,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-target="catalog">Katalog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-target="trial">Free Trial</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://wa.me/62895342517290" target="_blank">
@@ -893,36 +899,7 @@
             <h2 class="section-title">Produk & Layanan</h2>
             
             <div class="row">
-                <div class="col-md-6">
-                    <div class="card product-card">
-                        <div class="discount-badge">DISKON</div>
-                        <div class="card-body">
-                            <h4 class="card-title">Dasar Sempoa</h4>
-                            <p class="price-original">Rp 499.000</p>
-                            <p class="price-discount">Rp 99.000</p>
-                            <p class="card-text">Pelajari dasar-dasar sempoa untuk anak usia 5-8 tahun. Mulai dari pengenalan hingga operasi dasar.</p>
-                            <ul>
-                                <li>12 modul pembelajaran</li>
-                                <li>Akses ke platform AR</li>
-                                <li>Latihan Soal</li>
-                                <li>Sertifikat penyelesaian</li>
-                            </ul>
-                            <button class="btn btn-primary buy-btn" data-product="Dasar Sempoa" data-price="99000">Daftar Sekarang</button>
-                            
-                            <!-- Akses Materi untuk Produk yang Sudah Dibeli -->
-                            <div id="dasar-access" class="material-access" style="display: none;">
-                                <h5><i class="fas fa-lock-open me-2"></i>Akses Materi</h5>
-                                <ul class="material-list">
-                                    <li><a href="#"><i class="fas fa-video me-2"></i>Video Pembelajaran Dasar</a></li>
-                                    <li><a href="#"><i class="fas fa-book me-2"></i>Modul Dasar Sempoa</a></li>
-                                    <li><a href="#"><i class="fas fa-vr-cardboard me-2"></i>AR Sempoa Dasar</a></li>
-                                    <li><a href="#"><i class="fas fa-file-pdf me-2"></i>Latihan Soal Dasar</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
+                <!-- Beginner Sempoa -->
                 <div class="col-md-6">
                     <div class="card product-card">
                         <div class="discount-badge">DISKON</div>
@@ -941,6 +918,11 @@
                             </ul>
                             <button class="btn btn-primary buy-btn" data-product="Beginner Sempoa" data-price="299000">Daftar Sekarang</button>
                             
+                            <!-- Status Pembayaran -->
+                            <div id="beginner-paid" class="mt-3" style="display: none;">
+                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
+                            </div>
+                            
                             <!-- Akses Materi untuk Produk yang Sudah Dibeli -->
                             <div id="beginner-access" class="material-access" style="display: none;">
                                 <h5><i class="fas fa-lock-open me-2"></i>Akses Materi</h5>
@@ -956,6 +938,7 @@
                     </div>
                 </div>
                 
+                <!-- Intermediate Sempoa -->
                 <div class="col-md-6">
                     <div class="card product-card">
                         <div class="discount-badge">DISKON</div>
@@ -975,6 +958,11 @@
                             </ul>
                             <button class="btn btn-primary buy-btn" data-product="Intermediate Sempoa" data-price="449000">Daftar Sekarang</button>
                             
+                            <!-- Status Pembayaran -->
+                            <div id="intermediate-paid" class="mt-3" style="display: none;">
+                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
+                            </div>
+                            
                             <!-- Akses Materi untuk Produk yang Sudah Dibeli -->
                             <div id="intermediate-access" class="material-access" style="display: none;">
                                 <h5><i class="fas fa-lock-open me-2"></i>Akses Materi</h5>
@@ -985,6 +973,49 @@
                                     <li><a href="#"><i class="fas fa-file-pdf me-2"></i>Latihan Soal Intermediate</a></li>
                                     <li><a href="#"><i class="fas fa-download me-2"></i>Flash Card Sempoa</a></li>
                                     <li><a href="#"><i class="fas fa-video me-2"></i>Rekaman Zoom Class</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Advance Sempoa -->
+                <div class="col-md-6">
+                    <div class="card product-card">
+                        <div class="discount-badge">DISKON</div>
+                        <div class="card-body">
+                            <h4 class="card-title">Advance Sempoa</h4>
+                            <p class="price-original">Rp 1.500.000</p>
+                            <p class="price-discount">Rp 599.000</p>
+                            <p class="card-text">Tingkat lanjut untuk menguasai teknik sempoa tingkat tinggi dan kecepatan berhitung maksimal.</p>
+                            <ul>
+                                <li>50 modul pembelajaran</li>
+                                <li>Akses ke platform AR</li>
+                                <li>Video Tutorial</li>
+                                <li>Class Zoom private 3x for a week</li>
+                                <li>Flash Card Sempoa</li>
+                                <li>Latihan Soal</li>
+                                <li>Sertifikat penyelesaian</li>
+                                <li>Konsultasi dengan instruktur</li>
+                            </ul>
+                            <button class="btn btn-primary buy-btn" data-product="Advance Sempoa" data-price="599000">Daftar Sekarang</button>
+                            
+                            <!-- Status Pembayaran -->
+                            <div id="advance-paid" class="mt-3" style="display: none;">
+                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
+                            </div>
+                            
+                            <!-- Akses Materi untuk Produk yang Sudah Dibeli -->
+                            <div id="advance-access" class="material-access" style="display: none;">
+                                <h5><i class="fas fa-lock-open me-2"></i>Akses Materi</h5>
+                                <ul class="material-list">
+                                    <li><a href="#"><i class="fas fa-video me-2"></i>Video Pembelajaran Advance</a></li>
+                                    <li><a href="#"><i class="fas fa-book me-2"></i>Modul Advance Sempoa</a></li>
+                                    <li><a href="#"><i class="fas fa-vr-cardboard me-2"></i>AR Sempoa Advance</a></li>
+                                    <li><a href="#"><i class="fas fa-file-pdf me-2"></i>Latihan Soal Advance</a></li>
+                                    <li><a href="#"><i class="fas fa-download me-2"></i>Flash Card Sempoa</a></li>
+                                    <li><a href="#"><i class="fas fa-video me-2"></i>Rekaman Zoom Class</a></li>
+                                    <li><a href="#"><i class="fas fa-user me-2"></i>Konsultasi dengan Instruktur</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -1010,36 +1041,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body text-center">
-                                            <i class="fas fa-video fa-2x mb-3" style="color: var(--brown);"></i>
-                                            <h5>Video Pembelajaran</h5>
-                                            <p class="price-discount">Rp 75.000 / 5 video</p>
-                                            <p>Video interaktif dengan instruktur profesional</p>
-                                            <a href="#" class="btn btn-outline-primary btn-sm buy-catalog" data-product="Video Pembelajaran" data-price="75000">Beli Sekarang</a>
-                                            <div class="mt-2 catalog-access" style="display: none;">
-                                                <span class="access-badge"><i class="fas fa-unlock me-1"></i> Terbuka</span>
-                                                <a href="#" class="btn btn-success btn-sm mt-2">Akses Materi</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body text-center">
-                                            <i class="fas fa-file-pdf fa-2x mb-3" style="color: var(--brown);"></i>
-                                            <h5>Materi PDF</h5>
-                                            <p class="price-discount">Rp 59.000 / 5 modul</p>
-                                            <p>Modul pembelajaran lengkap dalam format PDF</p>
-                                            <a href="#" class="btn btn-outline-primary btn-sm buy-catalog" data-product="Materi PDF" data-price="59000">Beli Sekarang</a>
-                                            <div class="mt-2 catalog-access" style="display: none;">
-                                                <span class="access-badge"><i class="fas fa-unlock me-1"></i> Terbuka</span>
-                                                <a href="#" class="btn btn-success btn-sm mt-2">Akses Materi</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!-- Link Akses AR -->
                                 <div class="col-md-4 mb-3">
                                     <div class="card h-100">
                                         <div class="card-body text-center">
@@ -1048,6 +1050,58 @@
                                             <p class="price-discount">Rp 30.000</p>
                                             <p>Pengalaman belajar interaktif dengan teknologi AR</p>
                                             <a href="#" class="btn btn-outline-primary btn-sm buy-catalog" data-product="Akses Link AR" data-price="30000">Beli Sekarang</a>
+                                            
+                                            <!-- Status Pembayaran -->
+                                            <div id="ar-paid" class="mt-3" style="display: none;">
+                                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
+                                            </div>
+                                            
+                                            <div class="mt-2 catalog-access" style="display: none;">
+                                                <span class="access-badge"><i class="fas fa-unlock me-1"></i> Terbuka</span>
+                                                <a href="https://eongenesis-id.github.io/EONGENESIS/" target="_blank" class="btn btn-success btn-sm mt-2">Akses AR</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Video Tutorial -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-video fa-2x mb-3" style="color: var(--brown);"></i>
+                                            <h5>Video Tutorial</h5>
+                                            <p class="price-discount">Rp 75.000 / 5 video</p>
+                                            <p>Video interaktif dengan instruktur profesional</p>
+                                            <a href="#" class="btn btn-outline-primary btn-sm buy-catalog" data-product="Video Tutorial" data-price="75000">Beli Sekarang</a>
+                                            
+                                            <!-- Status Pembayaran -->
+                                            <div id="video-paid" class="mt-3" style="display: none;">
+                                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
+                                            </div>
+                                            
+                                            <div class="mt-2 catalog-access" style="display: none;">
+                                                <span class="access-badge"><i class="fas fa-unlock me-1"></i> Terbuka</span>
+                                                <a href="#" class="btn btn-success btn-sm mt-2">Akses Video</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Materi PDF -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-file-pdf fa-2x mb-3" style="color: var(--brown);"></i>
+                                            <h5>Materi PDF</h5>
+                                            <p class="price-discount">Rp 59.000 / 5 modul</p>
+                                            <p>Modul pembelajaran lengkap dalam format PDF</p>
+                                            <a href="#" class="btn btn-outline-primary btn-sm buy-catalog" data-product="Materi PDF" data-price="59000">Beli Sekarang</a>
+                                            
+                                            <!-- Status Pembayaran -->
+                                            <div id="pdf-paid" class="mt-3" style="display: none;">
+                                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
+                                            </div>
+                                            
                                             <div class="mt-2 catalog-access" style="display: none;">
                                                 <span class="access-badge"><i class="fas fa-unlock me-1"></i> Terbuka</span>
                                                 <a href="#" class="btn btn-success btn-sm mt-2">Akses Materi</a>
@@ -1055,69 +1109,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Tabel Kursus Tersedia dihapus sesuai permintaan -->
-        </section>
-
-        <!-- Free Trial Section -->
-        <section id="trial-section" class="content-section d-none">
-            <h2 class="section-title">Free Trial</h2>
-            
-            <div class="login-notice mb-4" id="sectionLoginNotice">
-                <i class="fas fa-exclamation-circle"></i>
-                <div>Harap anda Login terlebih dahulu untuk mengakses Free Trial</div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="trial-counter">
-                        <h4>Percobaan Gratis AR Sempoa</h4>
-                        <p>Klik tombol di bawah untuk mencoba pengalaman belajar sempoa dengan teknologi AR</p>
-                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#trialModal">Coba Sekarang</button>
-                    </div>
-                    
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            <h5>Cara Menggunakan</h5>
-                            <ol>
-                                <li>Klik tombol "Coba Sekarang"</li>
-                                <li>Anda akan diarahkan ke halaman AR Sempoa</li>
-                                <li>Ikuti instruksi yang muncul di layar</li>
-                                <li>Gunakan jari untuk berinteraksi dengan sempoa virtual</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-7">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4>Pengalaman Belajar AR</h4>
-                            <p>Dengan teknologi Augmented Reality, Anda dapat mengalami belajar sempoa secara interaktif. Sempoa virtual akan muncul di dunia nyata melalui kamera perangkat Anda.</p>
-                            
-                            <div class="mb-4">
-                                <h5>Fitur AR Sempoa:</h5>
-                                <ul>
-                                    <li>Interaksi real-time dengan sempoa virtual</li>
-                                    <li>Visualisasi 3D konsep matematika</li>
-                                    <li>Latihan interaktif dengan umpan balik instan</li>
-                                    <li>Gamifikasi untuk meningkatkan motivasi belajar</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="system-requirements">
-                                <h5>Persyaratan Sistem:</h5>
-                                <ul>
-                                    <li>Smartphone atau tablet dengan kamera</li>
-                                    <li>iOS 11+ atau Android 8.0+</li>
-                                    <li>Browser Chrome atau Safari terbaru</li>
-                                    <li>Koneksi internet stabil</li>
-                                </ul>
                             </div>
                         </div>
                     </div>
@@ -1146,16 +1137,16 @@
                 <div class="col-lg-3 mb-4">
                     <h5>Layanan</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-nude">Kursus Dasar</a></li>
                         <li><a href="#" class="text-nude">Kursus Beginner</a></li>
                         <li><a href="#" class="text-nude">Kursus Intermediate</a></li>
+                        <li><a href="#" class="text-nude">Kursus Advance</a></li>
                         <li><a href="#" class="text-nude">Free Trial</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-4">
                     <h5>Kontak Kami</h5>
                     <ul class="list-unstyled">
-                        <li><i class="fab fa-whatsapp me-2"></i> <a href="https://wa.me/62895342517290" class="text-nude" target="_blank">+62 895-3425-17290</a></li>
+                        <li><i class="fab fa-whatsapp me-2"></i> <a href="https://wa.me/62895342517290" class="text-nude" target="_blank">0895-3425-17290</a></li>
                         <li><i class="fas fa-envelope me-2"></i> <a href="mailto:info@eongenesis.id" class="text-nude">info@eongenesis.id</a></li>
                         <li><i class="fab fa-instagram me-2"></i> <a href="#" class="text-nude">@eongenesis.id</a></li>
                     </ul>
@@ -1324,13 +1315,22 @@
                 if (currentUser.purchasedProducts) {
                     currentUser.purchasedProducts.forEach(product => {
                         const accessElement = document.getElementById(`${product.toLowerCase().replace(/\s/g, '-')}-access`);
+                        const paidElement = document.getElementById(`${product.toLowerCase().replace(/\s/g, '-')}-paid`);
                         if (accessElement) {
                             accessElement.style.display = 'block';
+                        }
+                        if (paidElement) {
+                            paidElement.style.display = 'block';
                         }
                         
                         const buyButton = document.querySelector(`.buy-btn[data-product="${product}"]`);
                         if (buyButton) {
                             buyButton.style.display = 'none';
+                        }
+                        
+                        const buyCatalogButton = document.querySelector(`.buy-catalog[data-product="${product}"]`);
+                        if (buyCatalogButton) {
+                            buyCatalogButton.style.display = 'none';
                         }
                     });
                 }
@@ -1367,14 +1367,14 @@
                     el.style.display = 'none';
                 });
                 
+                // Sembunyikan status pembayaran
+                document.querySelectorAll('[id$="-paid"]').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
                 // Tampilkan tombol beli
                 document.querySelectorAll('.buy-btn').forEach(el => {
                     el.style.display = 'inline-block';
-                });
-                
-                // Sembunyikan akses katalog
-                document.querySelectorAll('.catalog-access').forEach(el => {
-                    el.style.display = 'none';
                 });
                 
                 // Tampilkan tombol beli katalog
@@ -1447,10 +1447,10 @@
                 return;
             }
             
-            // Validasi format nomor WhatsApp (maksimal 13 digit)
-            const whatsappRegex = /^[0-9]{10,13}$/;
+            // Validasi format nomor WhatsApp (13 digit, dimulai dengan 08)
+            const whatsappRegex = /^08[0-9]{9,11}$/;
             if (!whatsappRegex.test(whatsapp)) {
-                alert('Format nomor WhatsApp tidak valid. Gunakan format: 6281234567890 (10-13 digit)');
+                alert('Format nomor WhatsApp tidak valid. Gunakan format: 08xxxxxxxxxx (10-13 digit)');
                 return;
             }
             
@@ -1513,7 +1513,6 @@
             // Kirim data ke Google Sheets
             sendToGoogleSheets(newUser);
             
-            // Hapus pengiriman kupon 10% (sesuai permintaan)
             alert('Pendaftaran berhasil! Selamat bergabung dengan EonGenesis.id.');
             
             // Tutup modal
@@ -1551,7 +1550,7 @@
         });
         
         // Handle ajakan beli akses AR setelah trial habis
-        document.querySelector('#trialPromo button').addEventListener('click', function() {
+        document.getElementById('buyAfterTrial').addEventListener('click', function() {
             const productName = this.getAttribute('data-product');
             const productPrice = parseInt(this.getAttribute('data-price'));
             
@@ -1562,7 +1561,6 @@
             // Reset voucher
             activeVoucher = null;
             document.getElementById('voucherApplied').style.display = 'none';
-            document.getElementById('voucherCode').value = '';
             
             // Simpan data produk yang akan dibeli
             this.setAttribute('data-current-product', productName);
@@ -1601,7 +1599,6 @@
                 // Reset voucher
                 activeVoucher = null;
                 document.getElementById('voucherApplied').style.display = 'none';
-                document.getElementById('voucherCode').value = '';
                 
                 // Simpan data produk yang akan dibeli
                 this.setAttribute('data-current-product', productName);
@@ -1678,34 +1675,6 @@
             });
         });
         
-        // Terapkan voucher
-        document.getElementById('applyVoucher').addEventListener('click', function() {
-            const voucherCode = document.getElementById('voucherCode').value;
-            const productPriceElement = document.getElementById('paymentProductPrice');
-            let productPrice = parseInt(document.querySelector('[data-current-price]').getAttribute('data-current-price'));
-            
-            // Validasi minimal transaksi Rp 89.000
-            if (productPrice < 89000) {
-                alert('Voucher hanya dapat digunakan untuk transaksi minimal Rp 89.000');
-                return;
-            }
-            
-            if (validVouchers.includes(voucherCode)) {
-                // Terapkan diskon 10%
-                const discountedPrice = Math.floor(productPrice * 0.9);
-                productPriceElement.textContent = `Rp ${discountedPrice.toLocaleString('id-ID')}`;
-                document.getElementById('voucherApplied').style.display = 'block';
-                activeVoucher = voucherCode;
-                
-                // Update harga yang disimpan
-                document.querySelector('[data-current-price]').setAttribute('data-current-price', discountedPrice);
-                
-                alert('Voucher berhasil diterapkan! Anda mendapatkan diskon 10%.');
-            } else {
-                alert('Kode voucher tidak valid atau sudah kadaluarsa.');
-            }
-        });
-        
         // Konfirmasi pembayaran
         document.getElementById('confirmPayment').addEventListener('click', function() {
             const proofPayment = document.getElementById('proofPayment').files[0];
@@ -1735,6 +1704,11 @@
             }
             
             alert('Pembayaran berhasil! Status akun Anda telah diupgrade ke Premium. Silakan refresh halaman untuk melihat perubahan.');
+            
+            // Jika yang dibeli adalah Akses Link AR, arahkan ke halaman AR
+            if (productName === "Akses Link AR") {
+                window.open("https://eongenesis-id.github.io/EONGENESIS/", "_blank");
+            }
             
             // Tutup modal
             const paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
