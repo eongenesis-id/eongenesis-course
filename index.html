@@ -483,6 +483,108 @@
             text-align: center;
         }
         
+        .material-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .material-locked {
+            position: relative;
+        }
+        
+        .material-locked::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .material-locked::before {
+            content: '🔒 Kunci - Belum Dibeli';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .admin-section {
+            display: none;
+        }
+        
+        .user-section {
+            display: block;
+        }
+        
+        .admin-menu {
+            background-color: var(--dark-brown);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-menu-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .admin-menu-item:hover, .admin-menu-item.active {
+            background-color: var(--brown);
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--brown);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .material-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+        }
+        
+        .affiliate-badge {
+            background-color: #17a2b8;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .voucher-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
         @media (max-width: 768px) {
             .hero-section {
                 padding: 60px 0;
@@ -523,7 +625,9 @@
             <div id="userInfoContainer" class="user-info" style="display: none;">
                 <div class="user-avatar" id="userAvatar"></div>
                 <span id="userName"></span>
+                <span id="userRole" class="premium-badge" style="display: none;">Admin</span>
                 <span id="userStatus" class="premium-badge" style="display: none;">Premium</span>
+                <span id="userAffiliate" class="affiliate-badge" style="display: none;">Affiliate</span>
                 <button class="btn btn-sm btn-outline-primary ms-2" id="logoutBtn">Logout</button>
             </div>
         </div>
@@ -554,9 +658,10 @@
                             <div class="form-text text-danger" id="whatsappError" style="display: none;">Nomor WhatsApp sudah terdaftar</div>
                             <div class="form-text">Pastikan nomor WhatsApp aktif dan benar (13 digit, format: 08xxxxxxxxxx)</div>
                         </div>
-                        <div class="mb-3" id="affiliateSection" style="display: none;">
+                        <div class="mb-3">
                             <label for="affiliateCode" class="form-label">Kode Affiliate (opsional)</label>
                             <input type="text" class="form-control" id="affiliateCode">
+                            <div class="form-text text-danger" id="affiliateError" style="display: none;">Kode affiliate tidak valid</div>
                         </div>
                     </form>
                 </div>
@@ -642,6 +747,16 @@
                                     <p class="mb-0" id="voucherApplied" style="display: none;">Diskon: <span class="text-success">-10%</span></p>
                                     <p class="mb-0">Status: <span class="text-success">Belum dibayar</span></p>
                                 </div>
+                            </div>
+                            
+                            <!-- Section Voucher -->
+                            <div class="voucher-section">
+                                <h6>Gunakan Voucher</h6>
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control" id="voucherCode" placeholder="Masukkan kode voucher">
+                                    <button class="btn btn-outline-secondary" type="button" id="applyVoucher">Terapkan</button>
+                                </div>
+                                <div class="form-text" id="voucherMessage"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -751,6 +866,9 @@
                         <a class="nav-link" href="#" data-bs-target="catalog">Katalog</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="affiliate">Affiliate</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="https://wa.me/62895342517290" target="_blank">
                             <i class="fab fa-whatsapp me-1"></i> WhatsApp
                         </a>
@@ -760,1038 +878,1171 @@
         </div>
     </nav>
 
-    <!-- Main Content Sections -->
-    <div class="container my-5">
-        <!-- Home Section -->
-        <section id="home-section" class="content-section">
-            <!-- Hero Section -->
-            <div class="hero-section rounded">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6">
-                            <h1 class="display-4 fw-bold brand-font">Kursus Sempoa Modern dengan Teknologi AR</h1>
-                            <p class="lead">Tingkatkan kemampuan berhitung dengan metode sempoa yang dipadukan dengan teknologi Augmented Reality untuk pengalaman belajar yang interaktif.</p>
-                            <button class="btn btn-light btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#trialModal">Coba Free Trial <i class="fas fa-arrow-right ms-2"></i></button>
-                        </div>
-                        <div class="col-lg-6 d-none d-lg-block">
-                            <img src="https://images.unsplash.com/photo-1585432959449-b1c9c8cc49ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded shadow" alt="Sempoa AR">
+    <!-- User Section -->
+    <div class="user-section">
+        <!-- Main Content Sections -->
+        <div class="container my-5">
+            <!-- Home Section -->
+            <section id="home-section" class="content-section">
+                <!-- Hero Section -->
+                <div class="hero-section rounded">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6">
+                                <h1 class="display-4 fw-bold brand-font">Kursus Sempoa Modern dengan Teknologi AR</h1>
+                                <p class="lead">Tingkatkan kemampuan berhitung dengan metode sempoa yang dipadukan dengan teknologi Augmented Reality untuk pengalaman belajar yang interaktif.</p>
+                                <button class="btn btn-light btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#trialModal">Coba Free Trial <i class="fas fa-arrow-right ms-2"></i></button>
+                            </div>
+                            <div class="col-lg-6 d-none d-lg-block">
+                                <img src="https://images.unsplash.com/photo-1585432959449-b1c9c8cc49ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded shadow" alt="Sempoa AR">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Features Section -->
-            <div class="py-5">
-                <div class="container">
-                    <h2 class="section-title text-center">Mengapa Memilih EonGenesis.id?</h2>
-                    <div class="row">
-                        <div class="col-md-4 text-center mb-4">
-                            <div class="feature-icon">
-                                <i class="fas fa-vr-cardboard"></i>
+                <!-- Features Section -->
+                <div class="py-5">
+                    <div class="container">
+                        <h2 class="section-title text-center">Mengapa Memilih EonGenesis.id?</h2>
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-vr-cardboard"></i>
+                                </div>
+                                <h4>Teknologi AR</h4>
+                                <p>Belajar sempoa dengan Augmented Reality untuk pengalaman interaktif yang menyenangkan.</p>
                             </div>
-                            <h4>Teknologi AR</h4>
-                            <p>Belajar sempoa dengan Augmented Reality untuk pengalaman interaktif yang menyenangkan.</p>
-                        </div>
-                        <div class="col-md-4 text-center mb-4">
-                            <div class="feature-icon">
-                                <i class="fas fa-graduation-cap"></i>
+                            <div class="col-md-4 text-center mb-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <h4>Instruktur Berpengalaman</h4>
+                                <p>Diajar oleh instruktur profesional yang telah bersertifikat dan berpengalaman dalam mengajar sempoa.</p>
                             </div>
-                            <h4>Instruktur Berpengalaman</h4>
-                            <p>Diajar oleh instruktur profesional yang telah bersertifikat dan berpengalaman dalam mengajar sempoa.</p>
-                        </div>
-                        <div class="col-md-4 text-center mb-4">
-                            <div class="feature-icon">
-                                <i class="fas fa-certificate"></i>
+                            <div class="col-md-4 text-center mb-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                                <h4>Sertifikat Resmi</h4>
+                                <p>Dapatkan sertifikat resmi setelah menyelesaikan kursus yang dapat meningkatkan nilai akademis.</p>
                             </div>
-                            <h4>Sertifikat Resmi</h4>
-                            <p>Dapatkan sertifikat resmi setelah menyelesaikan kursus yang dapat meningkatkan nilai akademis.</p>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Zoom Class Info -->
-            <div class="zoom-class mt-5">
-                <h3 class="text-center"><i class="fas fa-video me-2"></i>Kelas Zoom Gratis</h3>
-                <p class="text-center">Setiap Hari Jumat pukul 18.30 WIB</p>
-                <div class="text-center mt-3">
-                    <p>Bergabunglah dengan kelas Zoom gratis kami untuk belajar sempoa bersama instruktur profesional.</p>
-                    <a href="#" class="btn btn-primary" id="zoomLink">
-                        <i class="fas fa-external-link-alt me-2"></i> Join Kelas Zoom
-                    </a>
-                </div>
-            </div>
-
-            <!-- Affiliate Program -->
-            <div class="affiliate-section">
-                <h3 class="text-center"><i class="fas fa-users me-2"></i>Program Affiliate</h3>
-                <p class="text-center">Dapatkan potongan 50% dengan mengajak 3 orang teman untuk bergabung</p>
-                
-                <div class="row mt-4">
-                    <div class="col-md-6">
-                        <h5>Cara Berpartisipasi:</h5>
-                        <ol>
-                            <li>Daftar sebagai member EonGenesis.id</li>
-                            <li>Dapatkan kode affiliate unik Anda</li>
-                            <li>Bagikan kode tersebut ke teman-teman Anda</li>
-                            <li>Dapatkan potongan 50% setelah 3 orang berhasil mendaftar menggunakan kode Anda</li>
-                        </ol>
+                <!-- Zoom Class Info -->
+                <div class="zoom-class mt-5">
+                    <h3 class="text-center"><i class="fas fa-video me-2"></i>Kelas Zoom Gratis</h3>
+                    <p class="text-center">Setiap Hari Jumat pukul 18.30 WIB</p>
+                    <div class="text-center mt-3">
+                        <p>Bergabunglah dengan kelas Zoom gratis kami untuk belajar sempoa bersama instruktur profesional.</p>
+                        <a href="#" class="btn btn-primary" id="zoomLink">Bergabung Kelas Zoom</a>
                     </div>
-                    <div class="col-md-6">
-                        <h5>Manfaat:</h5>
-                        <ul>
-                            <li>Potongan 50% untuk pembelian produk berikutnya</li>
-                            <li>Komisi untuk setiap member yang bergabung</li>
-                            <li>Akses ke materi affiliate eksklusif</li>
-                        </ul>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="content-section" style="display: none;">
+                <h2 class="section-title">Profil Pengguna</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="user-avatar mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;" id="profileAvatar"></div>
+                                <h5 id="profileName">Nama Pengguna</h5>
+                                <p id="profileWhatsapp">WhatsApp: -</p>
+                                <div id="profileStatusBadge" class="premium-badge mb-3" style="display: none;">Premium</div>
+                                <div id="profileAffiliateBadge" class="affiliate-badge mb-3" style="display: none;">Affiliate</div>
+                            </div>
+                        </div>
                         
-                        <div class="mt-3" id="affiliateInfo" style="display: none;">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6>Kode Affiliate Anda:</h6>
-                                    <p class="h4 text-primary" id="userAffiliateCode"></p>
-                                    <p class="small">Bagikan kode ini ke teman-teman Anda</p>
-                                    <p>Jumlah referral: <span id="referralCount">0</span> orang</p>
+                        <!-- Info Affiliate -->
+                        <div class="card mt-4" id="affiliateInfoCard" style="display: none;">
+                            <div class="card-body">
+                                <h5 class="card-title">Info Affiliate</h5>
+                                <p class="card-text">Kode Affiliate Anda:</p>
+                                <h4 class="text-center" id="affiliateCodeValue"></h4>
+                                <p class="card-text">Salin kode di atas dan bagikan kepada teman Anda. Anda akan mendapatkan komisi 10% dari setiap pembelian yang menggunakan kode affiliate Anda.</p>
+                                <button class="btn btn-sm btn-outline-primary w-100" id="copyAffiliateCode">Salin Kode</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Produk yang Dimiliki</h5>
+                                <div id="userProducts" class="mt-3">
+                                    <p class="text-muted">Anda belum membeli produk apapun.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Riwayat Affiliate -->
+                        <div class="card mt-4" id="affiliateHistoryCard" style="display: none;">
+                            <div class="card-body">
+                                <h5 class="card-title">Riwayat Affiliate</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Pengguna</th>
+                                                <th>Tanggal</th>
+                                                <th>Produk</th>
+                                                <th>Komisi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="affiliateHistory">
+                                            <!-- Data affiliate akan dimuat di sini -->
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Profile Section -->
-        <section id="profile-section" class="content-section d-none">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="section-title text-center">Profil Perusahaan</h2>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="text-center mb-4">
-                                <div class="logo" style="width: 80px; height: 80px; margin: 0 auto;">
-                                    <span class="logo-text" style="font-size: 36px;">E</span>
+            <!-- Products Section -->
+            <section id="products-section" class="content-section" style="display: none;">
+                <h2 class="section-title">Produk Kami</h2>
+                
+                <div class="row">
+                    <!-- Produk 1: Beginner Sempoa -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="discount-badge">DISKON 10%</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Beginner Sempoa</h5>
+                                <p class="card-text">Paket pemula untuk belajar dasar-dasar sempoa dengan metode yang mudah dipahami.</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="price-original">Rp 150.000</span>
+                                        <span class="price-discount">Rp 135.000</span>
+                                    </div>
+                                    <span class="access-badge" data-product="beginner">Materi Terkunci</span>
                                 </div>
-                                <h3 class="brand-font mt-3">EonGenesis.id</h3>
-                                <p class="lead">Revolusi Belajar Sempoa dengan Teknologi Modern</p>
+                                <button class="btn btn-primary w-100 buy-btn" data-product="Beginner Sempoa" data-price="135000" data-product-key="beginner">
+                                    Beli Sekarang
+                                </button>
                             </div>
-                            
-                            <h4>Visi</h4>
-                            <p>Menjadi platform edukasi sempoa terdepan yang memanfaatkan teknologi Augmented Reality untuk menciptakan pengalaman belajar yang menyenangkan dan efektif.</p>
-                            
-                            <h4>Misi</h4>
-                            <ul>
-                                <li>Menyediakan kurikulum sempoa yang komprehensif dan mudah dipahami</li>
-                                <li>Mengintegrasikan teknologi AR untuk meningkatkan engagement pembelajaran</li>
-                                <li>Menjangkau lebih banyak pelajar di seluruh Indonesia melalui platform digital</li>
-                                <li>Melatih instruktur berkualitas untuk mendampingi proses belajar siswa</li>
-                            </ul>
-                            
-                            <h4>Metode Pembelajaran</h4>
-                            <p>Kami menggabungkan metode sempoa tradisional dengan teknologi modern seperti Augmented Reality, video interaktif, dan platform digital untuk menciptakan pengalaman belajar yang unik dan efektif.</p>
+                        </div>
+                    </div>
+
+                    <!-- Produk 2: Intermediate Sempoa -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="discount-badge">DISKON 10%</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Intermediate Sempoa</h5>
+                                <p class="card-text">Tingkat lanjutan untuk menguasai teknik sempoa yang lebih kompleks.</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="price-original">Rp 200.000</span>
+                                        <span class="price-discount">Rp 180.000</span>
+                                    </div>
+                                    <span class="access-badge" data-product="intermediate">Materi Terkunci</span>
+                                </div>
+                                <button class="btn btn-primary w-100 buy-btn" data-product="Intermediate Sempoa" data-price="180000" data-product-key="intermediate">
+                                    Beli Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produk 3: Advanced Sempoa -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="discount-badge">DISKON 10%</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Advanced Sempoa</h5>
+                                <p class="card-text">Tingkat mahir untuk menjadi ahli dalam penggunaan sempoa dan perhitungan kompleks.</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="price-original">Rp 250.000</span>
+                                        <span class="price-discount">Rp 225.000</span>
+                                    </div>
+                                    <span class="access-badge" data-product="advanced">Materi Terkunci</span>
+                                </div>
+                                <button class="btn btn-primary w-100 buy-btn" data-product="Advanced Sempoa" data-price="225000" data-product-key="advanced">
+                                    Beli Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produk 4: Akses Link AR -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Akses Link AR</h5>
+                                <p class="card-text">Akses khusus ke teknologi Augmented Reality untuk pembelajaran sempoa interaktif.</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="price-discount">Rp 30.000</span>
+                                    </div>
+                                    <span class="access-badge" data-product="ar">Materi Terkunci</span>
+                                </div>
+                                <button class="btn btn-primary w-100 buy-btn" data-product="Akses Link AR" data-price="30000" data-product-key="ar">
+                                    Beli Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produk 5: Materi PDF -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Materi PDF</h5>
+                                <p class="card-text">Materi pembelajaran dalam format PDF yang dapat diunduh dan dipelajari offline.</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="price-discount">Rp 50.000</span>
+                                    </div>
+                                    <span class="access-badge" data-product="pdf">Materi Terkunci</span>
+                                </div>
+                                <button class="btn btn-primary w-100 buy-btn" data-product="Materi PDF" data-price="50000" data-product-key="pdf">
+                                    Beli Sekarang
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Products Section -->
-        <section id="products-section" class="content-section d-none">
-            <h2 class="section-title">Produk & Layanan</h2>
-            
-            <div class="row">
-                <!-- Beginner Sempoa -->
-                <div class="col-md-6">
-                    <div class="card product-card">
-                        <div class="discount-badge">DISKON</div>
-                        <div class="card-body">
-                            <h4 class="card-title">Beginner Sempoa</h4>
-                            <p class="price-original">Rp 899.000</p>
-                            <p class="price-discount">Rp 299.000</p>
-                            <p class="card-text">Tingkatkan kemampuan berhitung dengan operasi yang lebih kompleks untuk pemula.</p>
-                            <ul>
-                                <li>20 modul pembelajaran</li>
-                                <li>Akses ke platform AR</li>
-                                <li>Video Tutorial</li>
-                                <li>Flash Card Sempoa</li>
-                                <li>Latihan Soal</li>
-                                <li>Sertifikat penyelesaian</li>
-                            </ul>
-                            <button class="btn btn-primary buy-btn" data-product="Beginner Sempoa" data-price="299000">Daftar Sekarang</button>
-                            
-                            <!-- Status Pembayaran -->
-                            <div id="beginner-paid" class="mt-3" style="display: none;">
-                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
+            <!-- Catalog Section -->
+            <section id="catalog-section" class="content-section" style="display: none;">
+                <h2 class="section-title">Katalog Materi</h2>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i> Hanya materi dari produk yang telah Anda beli yang dapat diakses.
+                </div>
+                
+                <!-- Materi Beginner Sempoa -->
+                <div class="material-item" id="material-beginner">
+                    <h4>Materi Beginner Sempoa</h4>
+                    <p>Materi pembelajaran untuk tingkat pemula yang mencakup dasar-dasar penggunaan sempoa.</p>
+                    <div class="material-access">
+                        <h6>Daftar Materi:</h6>
+                        <ul class="material-list">
+                            <li><i class="fas fa-file-pdf me-2"></i> Pengenalan Sempoa - Dasar</li>
+                            <li><i class="fas fa-file-pdf me-2"></i> Penjumlahan Sederhana</li>
+                            <li><i class="fas fa-file-pdf me-2"></i> Pengurangan Sederhana</li>
+                            <li><i class="fas fa-video me-2"></i> Video Tutorial Level 1</li>
+                        </ul>
+                        <a href="#" class="btn btn-sm btn-success access-material-btn" data-product="beginner">Akses Materi</a>
+                    </div>
+                </div>
+                
+                <!-- Materi Intermediate Sempoa -->
+                <div class="material-item material-locked" id="material-intermediate">
+                    <h4>Materi Intermediate Sempoa</h4>
+                    <p>Materi pembelajaran untuk tingkat menengah dengan teknik yang lebih kompleks.</p>
+                </div>
+                
+                <!-- Materi Advanced Sempoa -->
+                <div class="material-item material-locked" id="material-advanced">
+                    <h4>Materi Advanced Sempoa</h4>
+                    <p>Materi pembelajaran untuk tingkat mahir dengan teknik perhitungan kompleks.</p>
+                </div>
+                
+                <!-- Materi AR -->
+                <div class="material-item material-locked" id="material-ar">
+                    <h4>Materi Augmented Reality</h4>
+                    <p>Akses ke teknologi AR untuk pembelajaran sempoa yang interaktif dan menyenangkan.</p>
+                </div>
+                
+                <!-- Materi PDF -->
+                <div class="material-item material-locked" id="material-pdf">
+                    <h4>Materi PDF</h4>
+                    <p>Kumpulan materi PDF yang dapat diunduh untuk belajar offline.</p>
+                </div>
+            </section>
+
+            <!-- Affiliate Section -->
+            <section id="affiliate-section" class="content-section" style="display: none;">
+                <h2 class="section-title">Program Affiliate</h2>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i> Dapatkan komisi 10% dari setiap pembelian yang menggunakan kode affiliate Anda.
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Kode Affiliate Anda</h5>
+                                <div class="text-center py-4">
+                                    <h2 id="userAffiliateCode" class="text-primary">-</h2>
+                                    <button class="btn btn-outline-primary mt-2" id="copyAffiliateBtn">
+                                        <i class="fas fa-copy me-2"></i> Salin Kode
+                                    </button>
+                                </div>
+                                <div class="mt-3">
+                                    <h6>Cara menggunakan:</h6>
+                                    <ol>
+                                        <li>Salin kode affiliate Anda</li>
+                                        <li>Bagikan kepada calon pengguna</li>
+                                        <li>Calon pengguna memasukkan kode saat mendaftar</li>
+                                        <li>Anda mendapatkan komisi 10% dari setiap pembelian mereka</li>
+                                    </ol>
+                                </div>
                             </div>
-                            
-                            <!-- Akses Materi untuk Produk yang Sudah Dibeli -->
-                            <div id="beginner-access" class="material-access" style="display: none;">
-                                <h5><i class="fas fa-lock-open me-2"></i>Akses Materi</h5>
-                                <ul class="material-list">
-                                    <li><a href="#"><i class="fas fa-video me-2"></i>Video Pembelajaran Beginner</a></li>
-                                    <li><a href="#"><i class="fas fa-book me-2"></i>Modul Beginner Sempoa</a></li>
-                                    <li><a href="#"><i class="fas fa-vr-cardboard me-2"></i>AR Sempoa Beginner</a></li>
-                                    <li><a href="#"><i class="fas fa-file-pdf me-2"></i>Latihan Soal Beginner</a></li>
-                                    <li><a href="#"><i class="fas fa-download me-2"></i>Flash Card Sempoa</a></li>
-                                </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Statistik Affiliate</h5>
+                                <div class="text-center py-3">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h3 id="affiliateCount">0</h3>
+                                            <p>Pengguna Terdaftar</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <h3 id="affiliateEarnings">Rp 0</h3>
+                                            <p>Total Komisi</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="mt-4">Riwayat Komisi</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Pengguna</th>
+                                                <th>Tanggal</th>
+                                                <th>Komisi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="affiliateStats">
+                                            <!-- Data affiliate akan dimuat di sini -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Intermediate Sempoa -->
-                <div class="col-md-6">
-                    <div class="card product-card">
-                        <div class="discount-badge">DISKON</div>
-                        <div class="card-body">
-                            <h4 class="card-title">Intermediate Sempoa</h4>
-                            <p class="price-original">Rp 1.200.000</p>
-                            <p class="price-discount">Rp 449.000</p>
-                            <p class="card-text">Kuasai teknik berhitung cepat dengan sempoa tingkat menengah.</p>
-                            <ul>
-                                <li>35 modul pembelajaran</li>
-                                <li>Akses ke platform AR</li>
-                                <li>Video Tutorial</li>
-                                <li>Class Zoom private 2x for a week</li>
-                                <li>Flash Card Sempoa</li>
-                                <li>Latihan Soal</li>
-                                <li>Sertifikat penyelesaian</li>
-                            </ul>
-                            <button class="btn btn-primary buy-btn" data-product="Intermediate Sempoa" data-price="449000">Daftar Sekarang</button>
-                            
-                            <!-- Status Pembayaran -->
-                            <div id="intermediate-paid" class="mt-3" style="display: none;">
-                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
-                            </div>
-                            
-                            <!-- Akses Materi untuk Produk yang Sudah Dibeli -->
-                            <div id="intermediate-access" class="material-access" style="display: none;">
-                                <h5><i class="fas fa-lock-open me-2"></i>Akses Materi</h5>
-                                <ul class="material-list">
-                                    <li><a href="#"><i class="fas fa-video me-2"></i>Video Pembelajaran Intermediate</a></li>
-                                    <li><a href="#"><i class="fas fa-book me-2"></i>Modul Intermediate Sempoa</a></li>
-                                    <li><a href="#"><i class="fas fa-vr-cardboard me-2"></i>AR Sempoa Intermediate</a></li>
-                                    <li><a href="#"><i class="fas fa-file-pdf me-2"></i>Latihan Soal Intermediate</a></li>
-                                    <li><a href="#"><i class="fas fa-download me-2"></i>Flash Card Sempoa</a></li>
-                                    <li><a href="#"><i class="fas fa-video me-2"></i>Rekaman Zoom Class</a></li>
-                                </ul>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Bagikan Kode Affiliate</h5>
+                        <p>Gunakan link berikut untuk mengajak orang lain bergabung:</p>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="affiliateLink" readonly>
+                            <button class="btn btn-outline-secondary" type="button" id="copyAffiliateLink">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <h6>Bagikan melalui:</h6>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="fab fa-facebook me-1"></i> Facebook
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="fab fa-instagram me-1"></i> Instagram
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Advance Sempoa -->
-                <div class="col-md-6">
-                    <div class="card product-card">
-                        <div class="discount-badge">DISKON</div>
-                        <div class="card-body">
-                            <h4 class="card-title">Advance Sempoa</h4>
-                            <p class="price-original">Rp 1.500.000</p>
-                            <p class="price-discount">Rp 599.000</p>
-                            <p class="card-text">Tingkat lanjut untuk menguasai teknik sempoa tingkat tinggi dan kecepatan berhitung maksimal.</p>
-                            <ul>
-                                <li>50 modul pembelajaran</li>
-                                <li>Akses ke platform AR</li>
-                                <li>Video Tutorial</li>
-                                <li>Class Zoom private 3x for a week</li>
-                                <li>Flash Card Sempoa</li>
-                                <li>Latihan Soal</li>
-                                <li>Sertifikat penyelesaian</li>
-                                <li>Konsultasi dengan instruktur</li>
-                            </ul>
-                            <button class="btn btn-primary buy-btn" data-product="Advance Sempoa" data-price="599000">Daftar Sekarang</button>
-                            
-                            <!-- Status Pembayaran -->
-                            <div id="advance-paid" class="mt-3" style="display: none;">
-                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
-                            </div>
-                            
-                            <!-- Akses Materi untuk Produk yang Sudah Dibeli -->
-                            <div id="advance-access" class="material-access" style="display: none;">
-                                <h5><i class="fas fa-lock-open me-2"></i>Akses Materi</h5>
-                                <ul class="material-list">
-                                    <li><a href="#"><i class="fas fa-video me-2"></i>Video Pembelajaran Advance</a></li>
-                                    <li><a href="#"><i class="fas fa-book me-2"></i>Modul Advance Sempoa</a></li>
-                                    <li><a href="#"><i class="fas fa-vr-cardboard me-2"></i>AR Sempoa Advance</a></li>
-                                    <li><a href="#"><i class="fas fa-file-pdf me-2"></i>Latihan Soal Advance</a></li>
-                                    <li><a href="#"><i class="fas fa-download me-2"></i>Flash Card Sempoa</a></li>
-                                    <li><a href="#"><i class="fas fa-video me-2"></i>Rekaman Zoom Class</a></li>
-                                    <li><a href="#"><i class="fas fa-user me-2"></i>Konsultasi dengan Instruktur</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Catalog Section -->
-        <section id="catalog-section" class="content-section d-none">
-            <h2 class="section-title">Katalog Kursus</h2>
-            
-            <div class="login-notice mb-4" id="catalogLoginNotice">
-                <i class="fas fa-exclamation-circle"></i>
-                <div>Anda perlu membeli salah satu produk untuk mengakses katalog lengkap</div>
-            </div>
-            
-            <div class="row mb-4">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header bg-brown text-white">
-                            <h5 class="mb-0"><i class="fas fa-book me-2"></i>Materi Pembelajaran</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <!-- Link Akses AR -->
-                                <div class="col-md-4 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body text-center">
-                                            <i class="fas fa-vr-cardboard fa-2x mb-3" style="color: var(--brown);"></i>
-                                            <h5>Akses Link AR</h5>
-                                            <p class="price-discount">Rp 30.000</p>
-                                            <p>Pengalaman belajar interaktif dengan teknologi AR</p>
-                                            <a href="#" class="btn btn-outline-primary btn-sm buy-catalog" data-product="Akses Link AR" data-price="30000">Beli Sekarang</a>
-                                            
-                                            <!-- Status Pembayaran -->
-                                            <div id="ar-paid" class="mt-3" style="display: none;">
-                                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
-                                            </div>
-                                            
-                                            <div class="mt-2 catalog-access" style="display: none;">
-                                                <span class="access-badge"><i class="fas fa-unlock me-1"></i> Terbuka</span>
-                                                <a href="https://eongenesis-id.github.io/EONGENESIS/" target="_blank" class="btn btn-success btn-sm mt-2">Akses AR</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Video Tutorial -->
-                                <div class="col-md-4 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body text-center">
-                                            <i class="fas fa-video fa-2x mb-3" style="color: var(--brown);"></i>
-                                            <h5>Video Tutorial</h5>
-                                            <p class="price-discount">Rp 75.000 / 5 video</p>
-                                            <p>Video interaktif dengan instruktur profesional</p>
-                                            <a href="#" class="btn btn-outline-primary btn-sm buy-catalog" data-product="Video Tutorial" data-price="75000">Beli Sekarang</a>
-                                            
-                                            <!-- Status Pembayaran -->
-                                            <div id="video-paid" class="mt-3" style="display: none;">
-                                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
-                                            </div>
-                                            
-                                            <div class="mt-2 catalog-access" style="display: none;">
-                                                <span class="access-badge"><i class="fas fa-unlock me-1"></i> Terbuka</span>
-                                                <a href="#" class="btn btn-success btn-sm mt-2">Akses Video</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Materi PDF -->
-                                <div class="col-md-4 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body text-center">
-                                            <i class="fas fa-file-pdf fa-2x mb-3" style="color: var(--brown);"></i>
-                                            <h5>Materi PDF</h5>
-                                            <p class="price-discount">Rp 59.000 / 5 modul</p>
-                                            <p>Modul pembelajaran lengkap dalam format PDF</p>
-                                            <a href="#" class="btn btn-outline-primary btn-sm buy-catalog" data-product="Materi PDF" data-price="59000">Beli Sekarang</a>
-                                            
-                                            <!-- Status Pembayaran -->
-                                            <div id="pdf-paid" class="mt-3" style="display: none;">
-                                                <span class="paid-badge"><i class="fas fa-check-circle me-1"></i> Sudah Dibayar</span>
-                                            </div>
-                                            
-                                            <div class="mt-2 catalog-access" style="display: none;">
-                                                <span class="access-badge"><i class="fas fa-unlock me-1"></i> Terbuka</span>
-                                                <a href="#" class="btn btn-success btn-sm mt-2">Akses Materi</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
 
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <h4 class="brand-font">EonGenesis.id</h4>
-                    <p>Revolusi belajar sempoa dengan teknologi Augmented Reality untuk pengalaman belajar yang interaktif dan menyenangkan.</p>
+                <div class="col-md-4 mb-4">
+                    <h5 class="brand-font">EonGenesis.id</h5>
+                    <p>Kursus Sempoa Modern dengan Teknologi Augmented Reality untuk pengalaman belajar yang interaktif dan menyenangkan.</p>
                 </div>
-                <div class="col-lg-2 mb-4">
-                    <h5>Menu</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-nude" data-bs-target="home">Home</a></li>
-                        <li><a href="#" class="text-nude" data-bs-target="profile">Profil</a></li>
-                        <li><a href="#" class="text-nude" data-bs-target="products">Produk</a></li>
-                        <li><a href="#" class="text-nude" data-bs-target="catalog">Katalog</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 mb-4">
-                    <h5>Layanan</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-nude">Kursus Beginner</a></li>
-                        <li><a href="#" class="text-nude">Kursus Intermediate</a></li>
-                        <li><a href="#" class="text-nude">Kursus Advance</a></li>
-                        <li><a href="#" class="text-nude">Free Trial</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 mb-4">
+                <div class="col-md-4 mb-4">
                     <h5>Kontak Kami</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="fab fa-whatsapp me-2"></i> <a href="https://wa.me/62895342517290" class="text-nude" target="_blank">0895-3425-17290</a></li>
-                        <li><i class="fas fa-envelope me-2"></i> <a href="mailto:info@eongenesis.id" class="text-nude">info@eongenesis.id</a></li>
-                        <li><i class="fab fa-instagram me-2"></i> <a href="#" class="text-nude">@eongenesis.id</a></li>
-                    </ul>
+                    <p><i class="fab fa-whatsapp me-2"></i> +62 895-3425-17290</p>
+                    <p><i class="fas fa-envelope me-2"></i> info@eongenesis.id</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Follow Kami</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-youtube fa-2x"></i></a>
+                    </div>
                 </div>
             </div>
-            <hr class="mt-0 mb-4">
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="mb-0">&copy; 2023 EonGenesis.id. All rights reserved.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <a href="#" class="text-nude me-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-nude me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-nude me-3"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-nude"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12 text-center">
-                    <p class="small text-muted">No. WhatsApp Admin: 0895342517290 | Rekening BCA: 1750999073 (Gabriella)</p>
-                </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2023 EonGenesis.id. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Data pengguna yang terdaftar (disimulasikan)
-        let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-        let inactivityTimer;
-        let activeVoucher = null;
-        let affiliateCodes = JSON.parse(localStorage.getItem('affiliateCodes')) || {};
-        
-        // Kode voucher yang valid
-        const validVouchers = ['WELCOME10', 'DISKON10', 'PROMO10'];
-        
-        // Fungsi untuk mengirim data ke Google Sheets
-        function sendToGoogleSheets(userData) {
-            // URL Google Apps Script yang telah di-deploy
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbxXhqgR8QJwjQYzQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQYQ/exec';
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inisialisasi data
+            if (!localStorage.getItem('users')) {
+                localStorage.setItem('users', JSON.stringify([
+                    {
+                        username: 'admin',
+                        password: 'admin123',
+                        whatsapp: '081234567890',
+                        role: 'admin',
+                        registeredAt: new Date().toISOString()
+                    }
+                ]));
+            }
             
-            // Data yang akan dikirim
-            const data = {
-                username: userData.username,
-                whatsapp: userData.whatsapp,
-                timestamp: new Date().toISOString()
-            };
+            if (!localStorage.getItem('payments')) {
+                localStorage.setItem('payments', JSON.stringify([]));
+            }
             
-            // Mengirim data menggunakan fetch
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => console.log('Data terkirim ke Google Sheets'))
-            .catch(error => console.error('Error:', error));
-        }
-        
-        // Fungsi untuk menampilkan informasi pengguna
-        function updateUserInterface() {
-            const loginFormContainer = document.getElementById('loginFormContainer');
-            const userInfoContainer = document.getElementById('userInfoContainer');
-            const userName = document.getElementById('userName');
-            const userAvatar = document.getElementById('userAvatar');
-            const userStatus = document.getElementById('userStatus');
-            const trialLink = document.getElementById('trialLink');
-            const trialLoginNotice = document.getElementById('trialLoginNotice');
-            const trialContent = document.getElementById('trialContent');
-            const trialLimitNotice = document.getElementById('trialLimitNotice');
-            const trialCount = document.getElementById('trialCount');
-            const sectionLoginNotice = document.getElementById('sectionLoginNotice');
-            const catalogLoginNotice = document.getElementById('catalogLoginNotice');
-            const adminResetButton = document.getElementById('adminResetButton');
-            const affiliateInfo = document.getElementById('affiliateInfo');
-            const userAffiliateCode = document.getElementById('userAffiliateCode');
-            const referralCount = document.getElementById('referralCount');
-            const trialPromo = document.getElementById('trialPromo');
+            if (!localStorage.getItem('trials')) {
+                localStorage.setItem('trials', JSON.stringify([]));
+            }
             
-            if (currentUser) {
-                // Pengguna sudah login
-                loginFormContainer.style.display = 'none';
-                userInfoContainer.style.display = 'flex';
-                userName.textContent = currentUser.username;
-                userAvatar.textContent = currentUser.username.charAt(0).toUpperCase();
+            if (!localStorage.getItem('affiliates')) {
+                localStorage.setItem('affiliates', JSON.stringify([]));
+            }
+            
+            if (!localStorage.getItem('vouchers')) {
+                localStorage.setItem('vouchers', JSON.stringify([
+                    { code: 'DISKON10', discount: 10, used: false }
+                ]));
+            }
+            
+            // Variabel global
+            let currentUser = null;
+            let isAdmin = false;
+            let appliedVoucher = null;
+            
+            // Fungsi untuk menampilkan notifikasi
+            function showAlert(message, type = 'success') {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+                alertDiv.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
                 
-                // Tampilkan status premium jika ada
-                if (currentUser.isPremium) {
-                    userStatus.style.display = 'inline-block';
-                } else {
-                    userStatus.style.display = 'none';
-                }
+                document.querySelector('.container').prepend(alertDiv);
                 
-                // Tampilkan tombol reset admin jika username adalah admin
-                if (currentUser.username === 'admin') {
-                    adminResetButton.style.display = 'block';
-                } else {
-                    adminResetButton.style.display = 'none';
-                }
-                
-                // Tampilkan info affiliate jika pengguna memiliki kode
-                if (currentUser.affiliateCode) {
-                    affiliateInfo.style.display = 'block';
-                    userAffiliateCode.textContent = currentUser.affiliateCode;
-                    referralCount.textContent = currentUser.referralCount || 0;
-                } else {
-                    affiliateInfo.style.display = 'none';
-                }
-                
-                // Periksa batas trial
-                const trialCountLeft = 2 - (currentUser.trialCount || 0);
-                trialCount.textContent = trialCountLeft;
-                
-                if (trialCountLeft > 0) {
-                    // Aktifkan link trial
-                    trialLink.classList.remove('disabled');
-                    trialLink.onclick = null;
-                    
-                    // Sembunyikan notice login di modal
-                    trialLoginNotice.style.display = 'none';
-                    trialLimitNotice.style.display = 'none';
-                    trialContent.style.display = 'block';
-                    trialPromo.style.display = 'none';
-                } else {
-                    // Nonaktifkan link trial
-                    trialLink.classList.add('disabled');
-                    trialLink.onclick = function(e) {
-                        e.preventDefault();
-                    };
-                    
-                    // Tampilkan notice batas trial
-                    trialLoginNotice.style.display = 'none';
-                    trialLimitNotice.style.display = 'flex';
-                    trialContent.style.display = 'block';
-                    
-                    // Tampilkan ajakan untuk membeli akses AR
-                    trialPromo.style.display = 'block';
-                }
-                
-                // Sembunyikan notice login di section
-                sectionLoginNotice.style.display = 'none';
-                
-                // Periksa akses katalog
-                if (currentUser.isPremium) {
-                    catalogLoginNotice.style.display = 'none';
-                    document.querySelectorAll('.catalog-access').forEach(el => {
-                        el.style.display = 'block';
-                    });
-                    document.querySelectorAll('.buy-catalog').forEach(el => {
-                        el.style.display = 'none';
-                    });
-                } else {
-                    catalogLoginNotice.style.display = 'flex';
-                    document.querySelectorAll('.catalog-access').forEach(el => {
-                        el.style.display = 'none';
-                    });
-                    document.querySelectorAll('.buy-catalog').forEach(el => {
-                        el.style.display = 'inline-block';
-                    });
-                }
-                
-                // Periksa akses kelas yang sudah dibeli
-                if (currentUser.purchasedProducts) {
-                    currentUser.purchasedProducts.forEach(product => {
-                        const accessElement = document.getElementById(`${product.toLowerCase().replace(/\s/g, '-')}-access`);
-                        const paidElement = document.getElementById(`${product.toLowerCase().replace(/\s/g, '-')}-paid`);
-                        if (accessElement) {
-                            accessElement.style.display = 'block';
-                        }
-                        if (paidElement) {
-                            paidElement.style.display = 'block';
-                        }
-                        
-                        const buyButton = document.querySelector(`.buy-btn[data-product="${product}"]`);
-                        if (buyButton) {
-                            buyButton.style.display = 'none';
-                        }
-                        
-                        const buyCatalogButton = document.querySelector(`.buy-catalog[data-product="${product}"]`);
-                        if (buyCatalogButton) {
-                            buyCatalogButton.style.display = 'none';
-                        }
-                    });
-                }
-                
-                // Reset timer inactivity
-                resetInactivityTimer();
-            } else {
-                // Pengguna belum login
-                loginFormContainer.style.display = 'inline-flex';
-                userInfoContainer.style.display = 'none';
-                adminResetButton.style.display = 'none';
-                affiliateInfo.style.display = 'none';
-                
-                // Nonaktifkan link trial
-                trialLink.classList.add('disabled');
-                trialLink.onclick = function(e) {
-                    e.preventDefault();
-                };
-                
-                // Tampilkan notice login di modal
-                trialLoginNotice.style.display = 'flex';
-                trialLimitNotice.style.display = 'none';
-                trialContent.style.display = 'none';
-                trialPromo.style.display = 'none';
-                
-                // Tampilkan notice login di section
-                sectionLoginNotice.style.display = 'flex';
-                
-                // Tampilkan notice katalog
-                catalogLoginNotice.style.display = 'flex';
-                
-                // Sembunyikan akses kelas
-                document.querySelectorAll('[id$="-access"]').forEach(el => {
-                    el.style.display = 'none';
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 5000);
+            }
+            
+            // Fungsi untuk menampilkan section berdasarkan target
+            function showSection(target) {
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.style.display = 'none';
                 });
                 
-                // Sembunyikan status pembayaran
-                document.querySelectorAll('[id$="-paid"]').forEach(el => {
-                    el.style.display = 'none';
-                });
+                document.querySelector(`#${target}-section`).style.display = 'block';
                 
-                // Tampilkan tombol beli
-                document.querySelectorAll('.buy-btn').forEach(el => {
-                    el.style.display = 'inline-block';
-                });
-                
-                // Tampilkan tombol beli katalog
-                document.querySelectorAll('.buy-catalog').forEach(el => {
-                    el.style.display = 'inline-block';
-                });
-            }
-        }
-        
-        // Fungsi untuk reset inactivity timer
-        function resetInactivityTimer() {
-            clearTimeout(inactivityTimer);
-            inactivityTimer = setTimeout(logoutDueToInactivity, 30 * 60 * 1000); // 30 menit
-        }
-        
-        // Fungsi untuk logout karena inactivity
-        function logoutDueToInactivity() {
-            if (currentUser) {
-                alert('Anda telah logout karena tidak aktif selama 30 menit.');
-                currentUser = null;
-                localStorage.removeItem('currentUser');
-                updateUserInterface();
-            }
-        }
-        
-        // Fungsi untuk menghasilkan kode affiliate acak
-        function generateAffiliateCode(username) {
-            const prefix = username.substring(0, 3).toUpperCase();
-            const randomNum = Math.floor(100 + Math.random() * 900);
-            return `${prefix}${randomNum}`;
-        }
-        
-        // Event listeners untuk reset inactivity timer
-        document.addEventListener('mousemove', resetInactivityTimer);
-        document.addEventListener('keypress', resetInactivityTimer);
-        document.addEventListener('click', resetInactivityTimer);
-        document.addEventListener('scroll', resetInactivityTimer);
-        
-        // Login form handling
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            // Cari pengguna yang terdaftar
-            const user = registeredUsers.find(u => u.username === username && u.password === password);
-            
-            if (user) {
-                // Login berhasil
-                currentUser = user;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                updateUserInterface();
-                
-                alert('Login berhasil! Selamat datang di EonGenesis.id');
-            } else {
-                alert('Username atau password salah. Silakan coba lagi.');
-            }
-        });
-        
-        // Registration form handling
-        document.getElementById('submitRegister').addEventListener('click', function() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const whatsapp = document.getElementById('whatsapp').value;
-            const affiliateCode = document.getElementById('affiliateCode').value;
-            
-            if (!username || !password || !whatsapp) {
-                alert('Harap isi semua field yang diperlukan');
-                return;
-            }
-            
-            // Validasi format nomor WhatsApp (13 digit, dimulai dengan 08)
-            const whatsappRegex = /^08[0-9]{9,11}$/;
-            if (!whatsappRegex.test(whatsapp)) {
-                alert('Format nomor WhatsApp tidak valid. Gunakan format: 08xxxxxxxxxx (10-13 digit)');
-                return;
-            }
-            
-            // Cek apakah username sudah digunakan
-            if (registeredUsers.some(user => user.username === username)) {
-                document.getElementById('usernameError').style.display = 'block';
-                return;
-            } else {
-                document.getElementById('usernameError').style.display = 'none';
-            }
-            
-            // Cek apakah nomor WhatsApp sudah digunakan
-            if (registeredUsers.some(user => user.whatsapp === whatsapp)) {
-                document.getElementById('whatsappError').style.display = 'block';
-                return;
-            } else {
-                document.getElementById('whatsappError').style.display = 'none';
-            }
-            
-            // Generate kode affiliate untuk pengguna baru
-            const newAffiliateCode = generateAffiliateCode(username);
-            
-            // Simpan data pendaftaran
-            const newUser = {
-                username: username,
-                password: password,
-                whatsapp: whatsapp,
-                registrationDate: new Date().toISOString(),
-                isPremium: false,
-                trialCount: 0,
-                purchasedProducts: [],
-                affiliateCode: newAffiliateCode,
-                referralCount: 0
-            };
-            
-            // Jika menggunakan kode affiliate, update referral count
-            if (affiliateCode && affiliateCodes[affiliateCode]) {
-                // Temukan pengguna dengan kode affiliate ini
-                const affiliateUserIndex = registeredUsers.findIndex(u => u.affiliateCode === affiliateCode);
-                if (affiliateUserIndex !== -1) {
-                    registeredUsers[affiliateUserIndex].referralCount = (registeredUsers[affiliateUserIndex].referralCount || 0) + 1;
+                // Jika user login, update tampilan materi berdasarkan produk yang dimiliki
+                if (currentUser && !isAdmin) {
+                    updateMaterialAccess();
+                    updateProductBadges();
+                    updateUserProducts();
                     
-                    // Jika sudah mencapai 3 referral, berikan status diskon 50%
-                    if (registeredUsers[affiliateUserIndex].referralCount >= 3) {
-                        registeredUsers[affiliateUserIndex].hasAffiliateDiscount = true;
+                    // Jika section affiliate, update data affiliate
+                    if (target === 'affiliate') {
+                        updateAffiliateData();
                     }
                     
-                    // Simpan perubahan
-                    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+                    // Jika section profile, update data profile
+                    if (target === 'profile') {
+                        updateProfileData();
+                    }
                 }
             }
             
-            registeredUsers.push(newUser);
-            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-            
-            // Set sebagai pengguna saat ini
-            currentUser = newUser;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            // Kirim data ke Google Sheets
-            sendToGoogleSheets(newUser);
-            
-            alert('Pendaftaran berhasil! Selamat bergabung dengan EonGenesis.id.');
-            
-            // Tutup modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
-            modal.hide();
-            
-            // Update UI
-            updateUserInterface();
-        });
-        
-        // Logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            updateUserInterface();
-            alert('Anda telah logout.');
-        });
-        
-        // Handle trial access
-        document.getElementById('trialLink').addEventListener('click', function() {
-            if (currentUser) {
-                // Tambah jumlah trial yang digunakan
-                currentUser.trialCount = (currentUser.trialCount || 0) + 1;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            // Fungsi untuk update akses materi berdasarkan produk yang dimiliki
+            function updateMaterialAccess() {
+                const products = currentUser.products || [];
                 
-                // Update data di registeredUsers
-                const userIndex = registeredUsers.findIndex(u => u.username === currentUser.username);
-                if (userIndex !== -1) {
-                    registeredUsers[userIndex] = currentUser;
-                    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-                }
+                // Daftar semua materi
+                const materials = ['beginner', 'intermediate', 'advanced', 'ar', 'pdf'];
                 
-                updateUserInterface();
+                materials.forEach(material => {
+                    const materialElement = document.getElementById(`material-${material}`);
+                    if (materialElement) {
+                        if (products.includes(material)) {
+                            materialElement.classList.remove('material-locked');
+                            
+                            // Update badge di produk
+                            const badge = document.querySelector(`.access-badge[data-product="${material}"]`);
+                            if (badge) {
+                                badge.textContent = 'Akses Tersedia';
+                                badge.classList.remove('access-badge');
+                                badge.classList.add('paid-badge');
+                            }
+                        } else {
+                            materialElement.classList.add('material-locked');
+                            
+                            // Update badge di produk
+                            const badge = document.querySelector(`.access-badge[data-product="${material}"]`);
+                            if (badge) {
+                                badge.textContent = 'Materi Terkunci';
+                                badge.classList.remove('paid-badge');
+                                badge.classList.add('access-badge');
+                            }
+                        }
+                    }
+                });
             }
-        });
-        
-        // Handle ajakan beli akses AR setelah trial habis
-        document.getElementById('buyAfterTrial').addEventListener('click', function() {
-            const productName = this.getAttribute('data-product');
-            const productPrice = parseInt(this.getAttribute('data-price'));
             
-            // Set data untuk modal pembayaran
-            document.getElementById('paymentProductName').textContent = productName;
-            document.getElementById('paymentProductPrice').textContent = `Rp ${productPrice.toLocaleString('id-ID')}`;
+            // Fungsi untuk update badge produk
+            function updateProductBadges() {
+                const products = currentUser.products || [];
+                
+                products.forEach(product => {
+                    const badge = document.querySelector(`.access-badge[data-product="${product}"]`);
+                    if (badge) {
+                        badge.textContent = 'Akses Tersedia';
+                        badge.classList.remove('access-badge');
+                        badge.classList.add('paid-badge');
+                    }
+                });
+            }
             
-            // Reset voucher
-            activeVoucher = null;
-            document.getElementById('voucherApplied').style.display = 'none';
+            // Fungsi untuk update daftar produk user di profil
+            function updateUserProducts() {
+                const userProductsContainer = document.getElementById('userProducts');
+                const products = currentUser.products || [];
+                
+                if (products.length === 0) {
+                    userProductsContainer.innerHTML = '<p class="text-muted">Anda belum membeli produk apapun.</p>';
+                } else {
+                    let html = '<div class="list-group">';
+                    
+                    products.forEach(product => {
+                        let productName = '';
+                        switch(product) {
+                            case 'beginner':
+                                productName = 'Beginner Sempoa';
+                                break;
+                            case 'intermediate':
+                                productName = 'Intermediate Sempoa';
+                                break;
+                            case 'advanced':
+                                productName = 'Advanced Sempoa';
+                                break;
+                            case 'ar':
+                                productName = 'Akses Link AR';
+                                break;
+                            case 'pdf':
+                                productName = 'Materi PDF';
+                                break;
+                            default:
+                                productName = product;
+                        }
+                        
+                        html += `
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                ${productName}
+                                <span class="paid-badge">Telah Dibeli</span>
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div>';
+                    userProductsContainer.innerHTML = html;
+                }
+            }
             
-            // Simpan data produk yang akan dibeli
-            this.setAttribute('data-current-product', productName);
-            this.setAttribute('data-current-price', productPrice);
-            
-            // Tutup modal trial
-            const trialModal = bootstrap.Modal.getInstance(document.getElementById('trialModal'));
-            trialModal.hide();
-            
-            // Tampilkan modal pembayaran
-            const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
-            paymentModal.show();
-        });
-        
-        // Handle pembelian produk
-        document.querySelectorAll('.buy-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (!currentUser) {
-                    alert('Silakan login terlebih dahulu untuk membeli produk.');
-                    return;
+            // Fungsi untuk update data affiliate
+            function updateAffiliateData() {
+                if (!currentUser.affiliateCode) {
+                    // Generate kode affiliate jika belum ada
+                    const affiliateCode = generateAffiliateCode();
+                    const users = JSON.parse(localStorage.getItem('users'));
+                    const userIndex = users.findIndex(u => u.username === currentUser.username);
+                    
+                    users[userIndex].affiliateCode = affiliateCode;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    currentUser.affiliateCode = affiliateCode;
                 }
                 
-                const productName = this.getAttribute('data-product');
-                let productPrice = parseInt(this.getAttribute('data-price'));
+                // Tampilkan kode affiliate
+                document.getElementById('userAffiliateCode').textContent = currentUser.affiliateCode;
                 
-                // Jika pengguna memiliki diskon affiliate, terapkan diskon 50%
-                if (currentUser.hasAffiliateDiscount) {
-                    productPrice = Math.floor(productPrice * 0.5);
-                    alert('Diskon affiliate 50% telah diterapkan!');
+                // Generate affiliate link
+                const affiliateLink = `${window.location.origin}${window.location.pathname}?ref=${currentUser.affiliateCode}`;
+                document.getElementById('affiliateLink').value = affiliateLink;
+                
+                // Hitung jumlah pengguna yang mendaftar dengan kode affiliate ini
+                const users = JSON.parse(localStorage.getItem('users'));
+                const affiliateUsers = users.filter(u => u.affiliatedBy === currentUser.username);
+                document.getElementById('affiliateCount').textContent = affiliateUsers.length;
+                
+                // Hitung total komisi
+                const payments = JSON.parse(localStorage.getItem('payments'));
+                let totalEarnings = 0;
+                let affiliateStats = '';
+                
+                affiliateUsers.forEach(user => {
+                    const userPayments = payments.filter(p => p.username === user.username && p.status === 'verified');
+                    
+                    userPayments.forEach(payment => {
+                        const commission = parseInt(payment.price) * 0.1; // 10% komisi
+                        totalEarnings += commission;
+                        
+                        affiliateStats += `
+                            <tr>
+                                <td>${user.username}</td>
+                                <td>${new Date(payment.date).toLocaleDateString('id-ID')}</td>
+                                <td>Rp ${commission.toLocaleString('id-ID')}</td>
+                            </tr>
+                        `;
+                    });
+                });
+                
+                document.getElementById('affiliateEarnings').textContent = `Rp ${totalEarnings.toLocaleString('id-ID')}`;
+                document.getElementById('affiliateStats').innerHTML = affiliateStats || '<tr><td colspan="3" class="text-center">Belum ada komisi</td></tr>';
+            }
+            
+            // Fungsi untuk update data profil
+            function updateProfileData() {
+                if (currentUser.affiliateCode) {
+                    document.getElementById('profileAffiliateBadge').style.display = 'block';
+                    document.getElementById('affiliateInfoCard').style.display = 'block';
+                    document.getElementById('affiliateCodeValue').textContent = currentUser.affiliateCode;
+                    
+                    // Load riwayat affiliate
+                    const users = JSON.parse(localStorage.getItem('users'));
+                    const payments = JSON.parse(localStorage.getItem('payments'));
+                    const affiliateUsers = users.filter(u => u.affiliatedBy === currentUser.username);
+                    let affiliateHistory = '';
+                    
+                    affiliateUsers.forEach(user => {
+                        const userPayments = payments.filter(p => p.username === user.username && p.status === 'verified');
+                        
+                        userPayments.forEach(payment => {
+                            const commission = parseInt(payment.price) * 0.1;
+                            
+                            affiliateHistory += `
+                                <tr>
+                                    <td>${user.username}</td>
+                                    <td>${new Date(payment.date).toLocaleDateString('id-ID')}</td>
+                                    <td>${payment.product}</td>
+                                    <td>Rp ${commission.toLocaleString('id-ID')}</td>
+                                </tr>
+                            `;
+                        });
+                    });
+                    
+                    document.getElementById('affiliateHistory').innerHTML = affiliateHistory || '<tr><td colspan="4" class="text-center">Belum ada riwayat affiliate</td></tr>';
+                    document.getElementById('affiliateHistoryCard').style.display = 'block';
                 }
+            }
+            
+            // Fungsi untuk generate kode affiliate
+            function generateAffiliateCode() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let code = '';
+                for (let i = 0; i < 8; i++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return code;
+            }
+            
+            // Fungsi untuk login
+            function loginUser(username, password) {
+                const users = JSON.parse(localStorage.getItem('users'));
+                const user = users.find(u => u.username === username && u.password === password);
                 
-                // Set data untuk modal pembayaran
-                document.getElementById('paymentProductName').textContent = productName;
-                document.getElementById('paymentProductPrice').textContent = `Rp ${productPrice.toLocaleString('id-ID')}`;
+                if (user) {
+                    currentUser = user;
+                    
+                    // Cek jika admin
+                    if (username === 'admin' && password === 'admin123') {
+                        isAdmin = true;
+                        document.getElementById('userRole').style.display = 'inline';
+                        document.getElementById('userRole').textContent = 'Admin';
+                        
+                        // Redirect ke halaman admin (jika ada)
+                        showAlert('Login admin berhasil!', 'success');
+                    } else {
+                        isAdmin = false;
+                        
+                        // Tampilkan badge affiliate jika ada
+                        if (currentUser.affiliateCode) {
+                            document.getElementById('userAffiliate').style.display = 'inline';
+                        }
+                        
+                        // Tampilkan badge premium jika ada produk
+                        if (user.products && user.products.length > 0) {
+                            document.getElementById('userStatus').style.display = 'inline';
+                            document.getElementById('profileStatusBadge').style.display = 'block';
+                        }
+                    }
+                    
+                    // Update UI setelah login
+                    document.getElementById('loginFormContainer').style.display = 'none';
+                    document.getElementById('userInfoContainer').style.display = 'flex';
+                    document.getElementById('userName').textContent = user.username;
+                    document.getElementById('userAvatar').textContent = user.username.charAt(0).toUpperCase();
+                    
+                    // Update profil
+                    document.getElementById('profileName').textContent = user.username;
+                    document.getElementById('profileWhatsapp').textContent = `WhatsApp: ${user.whatsapp}`;
+                    document.getElementById('profileAvatar').textContent = user.username.charAt(0).toUpperCase();
+                    
+                    // Sembunyikan notifikasi login di trial modal
+                    document.getElementById('trialLoginNotice').style.display = 'none';
+                    
+                    // Cek trial count
+                    const trials = JSON.parse(localStorage.getItem('trials'));
+                    const userTrials = trials.filter(t => t.username === user.username);
+                    
+                    if (userTrials.length < 2) {
+                        document.getElementById('trialContent').style.display = 'block';
+                        document.getElementById('trialCount').textContent = 2 - userTrials.length;
+                        document.getElementById('trialPromo').style.display = 'none';
+                    } else {
+                        document.getElementById('trialLimitNotice').style.display = 'flex';
+                        document.getElementById('trialContent').style.display = 'none';
+                        document.getElementById('trialPromo').style.display = 'block';
+                    }
+                    
+                    showAlert('Login berhasil!', 'success');
+                    return true;
+                } else {
+                    showAlert('Username atau password salah!', 'danger');
+                    return false;
+                }
+            }
+            
+            // Fungsi untuk logout
+            function logoutUser() {
+                currentUser = null;
+                isAdmin = false;
                 
-                // Reset voucher
-                activeVoucher = null;
-                document.getElementById('voucherApplied').style.display = 'none';
+                // Update UI setelah logout
+                document.getElementById('loginFormContainer').style.display = 'block';
+                document.getElementById('userInfoContainer').style.display = 'none';
+                document.getElementById('userRole').style.display = 'none';
+                document.getElementById('userStatus').style.display = 'none';
+                document.getElementById('userAffiliate').style.display = 'none';
                 
-                // Simpan data produk yang akan dibeli
-                this.setAttribute('data-current-product', productName);
-                this.setAttribute('data-current-price', productPrice);
+                // Reset form login
+                document.getElementById('loginForm').reset();
                 
-                // Tampilkan modal pembayaran
-                const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
-                paymentModal.show();
-            });
-        });
-        
-        // Handle pembelian katalog
-        document.querySelectorAll('.buy-catalog').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+                // Tampilkan notifikasi login di trial modal
+                document.getElementById('trialLoginNotice').style.display = 'flex';
+                document.getElementById('trialContent').style.display = 'none';
+                document.getElementById('trialLimitNotice').style.display = 'none';
+                document.getElementById('trialPromo').style.display = 'none';
+                
+                showAlert('Anda telah logout.', 'info');
+            }
+            
+            // Event listener untuk form login
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                loginUser(username, password);
+            });
+            
+            // Event listener untuk tombol logout
+            document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+            
+            // Event listener untuk navigasi
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update class active
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Tampilkan section yang sesuai
+                    const target = this.getAttribute('data-bs-target');
+                    showSection(target);
+                });
+            });
+            
+            // Event listener untuk pendaftaran
+            document.getElementById('submitRegister').addEventListener('click', function() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const whatsapp = document.getElementById('whatsapp').value;
+                const affiliateCode = document.getElementById('affiliateCode').value;
+                
+                // Validasi nomor WhatsApp
+                const whatsappRegex = /^08[0-9]{9,11}$/;
+                if (!whatsappRegex.test(whatsapp)) {
+                    showAlert('Nomor WhatsApp harus 13 digit dan dimulai dengan 08!', 'danger');
+                    return;
+                }
+                
+                const users = JSON.parse(localStorage.getItem('users'));
+                
+                // Cek apakah username sudah ada
+                if (users.find(u => u.username === username)) {
+                    document.getElementById('usernameError').style.display = 'block';
+                    return;
+                } else {
+                    document.getElementById('usernameError').style.display = 'none';
+                }
+                
+                // Cek apakah WhatsApp sudah ada
+                if (users.find(u => u.whatsapp === whatsapp)) {
+                    document.getElementById('whatsappError').style.display = 'block';
+                    return;
+                } else {
+                    document.getElementById('whatsappError').style.display = 'none';
+                }
+                
+                // Cek kode affiliate jika diisi
+                let affiliatedBy = null;
+                if (affiliateCode) {
+                    const affiliateUser = users.find(u => u.affiliateCode === affiliateCode);
+                    if (!affiliateUser) {
+                        document.getElementById('affiliateError').style.display = 'block';
+                        return;
+                    } else {
+                        document.getElementById('affiliateError').style.display = 'none';
+                        affiliatedBy = affiliateUser.username;
+                    }
+                }
+                
+                // Tambahkan user baru
+                users.push({
+                    username,
+                    password,
+                    whatsapp,
+                    affiliatedBy,
+                    products: [],
+                    registeredAt: new Date().toISOString()
+                });
+                
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Tutup modal dan reset form
+                const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                registerModal.hide();
+                document.getElementById('registerForm').reset();
+                
+                showAlert('Pendaftaran berhasil! Silakan login.', 'success');
+            });
+            
+            // Event listener untuk tombol beli
+            document.querySelectorAll('.buy-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (!currentUser) {
+                        showAlert('Silakan login terlebih dahulu untuk membeli produk.', 'warning');
+                        return;
+                    }
+                    
+                    const productName = this.getAttribute('data-product');
+                    const productPrice = this.getAttribute('data-price');
+                    const productKey = this.getAttribute('data-product-key');
+                    
+                    document.getElementById('paymentProductName').textContent = productName;
+                    document.getElementById('paymentProductPrice').textContent = `Rp ${parseInt(productPrice).toLocaleString('id-ID')}`;
+                    
+                    // Simpan data produk yang dipilih di button untuk referensi nanti
+                    const confirmBtn = document.getElementById('confirmPayment');
+                    confirmBtn.setAttribute('data-product', productName);
+                    confirmBtn.setAttribute('data-price', productPrice);
+                    confirmBtn.setAttribute('data-product-key', productKey);
+                    
+                    // Reset voucher
+                    appliedVoucher = null;
+                    document.getElementById('voucherApplied').style.display = 'none';
+                    document.getElementById('voucherMessage').textContent = '';
+                    document.getElementById('voucherCode').value = '';
+                    
+                    const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+                    paymentModal.show();
+                });
+            });
+            
+            // Event listener untuk metode pembayaran
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    const method = this.getAttribute('data-method');
+                    document.querySelector(`#${method}Method`).checked = true;
+                    
+                    // Tampilkan detail sesuai metode
+                    if (method === 'qris') {
+                        document.getElementById('qrisCode').style.display = 'block';
+                        document.getElementById('bankTransferDetails').style.display = 'none';
+                    } else {
+                        document.getElementById('qrisCode').style.display = 'none';
+                        document.getElementById('bankTransferDetails').style.display = 'block';
+                    }
+                });
+            });
+            
+            // Event listener untuk aplikasikan voucher
+            document.getElementById('applyVoucher').addEventListener('click', function() {
+                const voucherCode = document.getElementById('voucherCode').value;
+                const vouchers = JSON.parse(localStorage.getItem('vouchers'));
+                const voucher = vouchers.find(v => v.code === voucherCode && !v.used);
+                
+                if (voucher) {
+                    appliedVoucher = voucher;
+                    
+                    // Hitung harga setelah diskon
+                    const originalPrice = parseInt(document.getElementById('confirmPayment').getAttribute('data-price'));
+                    const discountedPrice = originalPrice - (originalPrice * voucher.discount / 100);
+                    
+                    document.getElementById('paymentProductPrice').textContent = `Rp ${discountedPrice.toLocaleString('id-ID')}`;
+                    document.getElementById('voucherApplied').style.display = 'block';
+                    document.getElementById('voucherMessage').textContent = `Voucher berhasil diterapkan! Diskon ${voucher.discount}%`;
+                    document.getElementById('voucherMessage').className = 'form-text text-success';
+                    
+                    // Update harga di tombol konfirmasi
+                    document.getElementById('confirmPayment').setAttribute('data-price', discountedPrice);
+                } else {
+                    document.getElementById('voucherMessage').textContent = 'Kode voucher tidak valid atau sudah digunakan';
+                    document.getElementById('voucherMessage').className = 'form-text text-danger';
+                }
+            });
+            
+            // Event listener untuk konfirmasi pembayaran
+            document.getElementById('confirmPayment').addEventListener('click', function() {
+                const productName = this.getAttribute('data-product');
+                const productPrice = this.getAttribute('data-price');
+                const productKey = this.getAttribute('data-product-key');
+                const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+                const proofPayment = document.getElementById('proofPayment').files[0];
+                
+                if (!proofPayment) {
+                    showAlert('Harap upload bukti pembayaran.', 'warning');
+                    return;
+                }
+                
+                // Simpan data pembayaran
+                const payments = JSON.parse(localStorage.getItem('payments'));
+                payments.push({
+                    username: currentUser.username,
+                    product: productName,
+                    price: productPrice,
+                    method: paymentMethod,
+                    proof: URL.createObjectURL(proofPayment), // Simpan sebagai URL (hanya simulasi)
+                    status: 'pending',
+                    date: new Date().toISOString()
+                });
+                
+                localStorage.setItem('payments', JSON.stringify(payments));
+                
+                // Tandai voucher sebagai digunakan jika ada
+                if (appliedVoucher) {
+                    const vouchers = JSON.parse(localStorage.getItem('vouchers'));
+                    const voucherIndex = vouchers.findIndex(v => v.code === appliedVoucher.code);
+                    if (voucherIndex !== -1) {
+                        vouchers[voucherIndex].used = true;
+                        localStorage.setItem('vouchers', JSON.stringify(vouchers));
+                    }
+                }
+                
+                // Tambahkan produk ke user jika belum ada
+                if (productKey && !currentUser.products.includes(productKey)) {
+                    const users = JSON.parse(localStorage.getItem('users'));
+                    const userIndex = users.findIndex(u => u.username === currentUser.username);
+                    
+                    if (!users[userIndex].products) {
+                        users[userIndex].products = [];
+                    }
+                    
+                    users[userIndex].products.push(productKey);
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    // Update currentUser
+                    currentUser = users[userIndex];
+                    
+                    // Update UI
+                    updateMaterialAccess();
+                    updateProductBadges();
+                    updateUserProducts();
+                    
+                    // Tampilkan badge premium jika belum ada
+                    if (currentUser.products && currentUser.products.length > 0) {
+                        document.getElementById('userStatus').style.display = 'inline';
+                        document.getElementById('profileStatusBadge').style.display = 'block';
+                    }
+                }
+                
+                // Tutup modal
+                const paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                paymentModal.hide();
+                
+                showAlert('Pembayaran berhasil dikonfirmasi! Produk akan segera diaktifkan setelah verifikasi.', 'success');
+                
+                // Jika yang dibeli adalah Akses Link AR, redirect ke halaman AR
+                if (productKey === 'ar') {
+                    setTimeout(() => {
+                        window.open('https://eongenesis-id.github.io/EONGENESIS/', '_blank');
+                    }, 2000);
+                }
+            });
+            
+            // Event listener untuk tombol beli setelah trial habis
+            document.getElementById('buyAfterTrial').addEventListener('click', function() {
                 if (!currentUser) {
-                    alert('Silakan login terlebih dahulu untuk membeli produk.');
+                    showAlert('Silakan login terlebih dahulu untuk membeli produk.', 'warning');
                     return;
                 }
                 
                 const productName = this.getAttribute('data-product');
-                let productPrice = parseInt(this.getAttribute('data-price'));
+                const productPrice = this.getAttribute('data-price');
                 
-                // Validasi minimal transaksi Rp 89.000 untuk menggunakan voucher
-                if (activeVoucher && productPrice < 89000) {
-                    alert('Voucher hanya dapat digunakan untuk transaksi minimal Rp 89.000');
-                    activeVoucher = null;
-                    document.getElementById('voucherApplied').style.display = 'none';
-                    productPrice = parseInt(this.getAttribute('data-price'));
-                }
-                
-                // Jika pengguna memiliki diskon affiliate, terapkan diskon 50%
-                if (currentUser.hasAffiliateDiscount) {
-                    productPrice = Math.floor(productPrice * 0.5);
-                    alert('Diskon affiliate 50% telah diterapkan!');
-                }
-                
-                // Set data untuk modal pembayaran
                 document.getElementById('paymentProductName').textContent = productName;
-                document.getElementById('paymentProductPrice').textContent = `Rp ${productPrice.toLocaleString('id-ID')}`;
+                document.getElementById('paymentProductPrice').textContent = `Rp ${parseInt(productPrice).toLocaleString('id-ID')}`;
                 
-                // Simpan data produk yang akan dibeli
-                this.setAttribute('data-current-product', productName);
-                this.setAttribute('data-current-price', productPrice);
+                document.getElementById('confirmPayment').setAttribute('data-product', productName);
+                document.getElementById('confirmPayment').setAttribute('data-price', productPrice);
+                document.getElementById('confirmPayment').setAttribute('data-product-key', 'ar');
                 
-                // Tampilkan modal pembayaran
                 const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
                 paymentModal.show();
             });
-        });
-        
-        // Handle metode pembayaran
-        document.querySelectorAll('.payment-option').forEach(option => {
-            option.addEventListener('click', function() {
-                // Tandai opsi yang dipilih
-                document.querySelectorAll('.payment-option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-                this.classList.add('selected');
-                
-                // Tandai radio button yang sesuai
-                const radioId = this.getAttribute('data-method') + 'Method';
-                document.getElementById(radioId).checked = true;
-                
-                // Tampilkan detail pembayaran yang sesuai
-                document.getElementById('bankTransferDetails').style.display = 'block';
-                document.getElementById('qrisCode').style.display = 'none';
-                
-                if (this.getAttribute('data-method') === 'qris') {
-                    document.getElementById('bankTransferDetails').style.display = 'none';
-                    document.getElementById('qrisCode').style.display = 'block';
-                }
-            });
-        });
-        
-        // Konfirmasi pembayaran
-        document.getElementById('confirmPayment').addEventListener('click', function() {
-            const proofPayment = document.getElementById('proofPayment').files[0];
-            if (!proofPayment) {
-                alert('Harap upload bukti pembayaran terlebih dahulu.');
-                return;
-            }
             
-            // Dapatkan produk yang dibeli dari tombol yang diklik
-            const productName = document.querySelector('[data-current-product]').getAttribute('data-current-product');
-            
-            // Update status pengguna
-            currentUser.isPremium = true;
-            if (!currentUser.purchasedProducts) {
-                currentUser.purchasedProducts = [];
-            }
-            currentUser.purchasedProducts.push(productName);
-            
-            // Simpan perubahan
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            // Update data di registeredUsers
-            const userIndex = registeredUsers.findIndex(u => u.username === currentUser.username);
-            if (userIndex !== -1) {
-                registeredUsers[userIndex] = currentUser;
-                localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-            }
-            
-            alert('Pembayaran berhasil! Status akun Anda telah diupgrade ke Premium. Silakan refresh halaman untuk melihat perubahan.');
-            
-            // Jika yang dibeli adalah Akses Link AR, arahkan ke halaman AR
-            if (productName === "Akses Link AR") {
-                window.open("https://eongenesis-id.github.io/EONGENESIS/", "_blank");
-            }
-            
-            // Tutup modal
-            const paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
-            paymentModal.hide();
-            
-            // Update UI
-            updateUserInterface();
-        });
-        
-        // Reset data oleh admin
-        document.getElementById('confirmReset').addEventListener('click', function() {
-            const adminPassword = document.getElementById('adminPassword').value;
-            
-            if (adminPassword === 'admin123') {
-                // Hapus semua data pengguna
-                registeredUsers = [];
-                localStorage.removeItem('registeredUsers');
-                localStorage.removeItem('currentUser');
-                localStorage.removeItem('affiliateCodes');
-                
-                alert('Data berhasil direset! Semua data pengguna telah dihapus.');
-                
-                // Tutup modal
-                const adminModal = bootstrap.Modal.getInstance(document.getElementById('adminModal'));
-                adminModal.hide();
-                
-                // Update UI
-                currentUser = null;
-                updateUserInterface();
-            } else {
-                alert('Password admin salah!');
-            }
-        });
-        
-        // Tampilkan section affiliate saat mendaftar jika ada kode
-        document.getElementById('affiliateCode').addEventListener('focus', function() {
-            document.getElementById('affiliateSection').style.display = 'block';
-        });
-        
-        // Navigation handling
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                if (this.dataset.bsTarget) {
+            // Event listener untuk tombol akses materi
+            document.querySelectorAll('.access-material-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    // Hide all sections
-                    document.querySelectorAll('.content-section').forEach(section => {
-                        section.classList.add('d-none');
-                    });
+                    const productKey = this.getAttribute('data-product');
                     
-                    // Show target section
-                    const targetSection = document.getElementById(`${this.dataset.bsTarget}-section`);
-                    if (targetSection) {
-                        targetSection.classList.remove('d-none');
+                    if (!currentUser) {
+                        showAlert('Silakan login terlebih dahulu untuk mengakses materi.', 'warning');
+                        return;
                     }
                     
-                    // Update active nav link
-                    document.querySelectorAll('.nav-link').forEach(navLink => {
-                        navLink.classList.remove('active');
-                    });
-                    this.classList.add('active');
+                    if (!currentUser.products || !currentUser.products.includes(productKey)) {
+                        showAlert('Anda belum membeli produk ini. Silakan beli terlebih dahulu.', 'warning');
+                        return;
+                    }
                     
-                    // Scroll to top
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    // Redirect ke materi berdasarkan produk
+                    switch(productKey) {
+                        case 'beginner':
+                            window.open('https://eongenesis-id.github.io/EONGENESIS/beginner', '_blank');
+                            break;
+                        case 'intermediate':
+                            window.open('https://eongenesis-id.github.io/EONGENESIS/intermediate', '_blank');
+                            break;
+                        case 'advanced':
+                            window.open('https://eongenesis-id.github.io/EONGENESIS/advanced', '_blank');
+                            break;
+                        case 'ar':
+                            window.open('https://eongenesis-id.github.io/EONGENESIS/', '_blank');
+                            break;
+                        case 'pdf':
+                            window.open('https://eongenesis-id.github.io/EONGENESIS/pdf', '_blank');
+                            break;
+                    }
+                });
+            });
+            
+            // Event listener untuk tombol salin kode affiliate
+            document.getElementById('copyAffiliateCode').addEventListener('click', function() {
+                const code = document.getElementById('affiliateCodeValue').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    showAlert('Kode affiliate berhasil disalin!', 'success');
+                });
+            });
+            
+            document.getElementById('copyAffiliateBtn').addEventListener('click', function() {
+                const code = document.getElementById('userAffiliateCode').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    showAlert('Kode affiliate berhasil disalin!', 'success');
+                });
+            });
+            
+            document.getElementById('copyAffiliateLink').addEventListener('click', function() {
+                const link = document.getElementById('affiliateLink').value;
+                navigator.clipboard.writeText(link).then(() => {
+                    showAlert('Link affiliate berhasil disalin!', 'success');
+                });
+            });
+            
+            // Event listener untuk tombol reset admin
+            document.getElementById('confirmReset').addEventListener('click', function() {
+                const adminPassword = document.getElementById('adminPassword').value;
+                
+                if (adminPassword === 'admin123') {
+                    localStorage.removeItem('users');
+                    localStorage.removeItem('payments');
+                    localStorage.removeItem('trials');
+                    localStorage.removeItem('affiliates');
+                    localStorage.removeItem('vouchers');
+                    
+                    // Reset ke state awal
+                    localStorage.setItem('users', JSON.stringify([
+                        {
+                            username: 'admin',
+                            password: 'admin123',
+                            whatsapp: '081234567890',
+                            role: 'admin',
+                            registeredAt: new Date().toISOString()
+                        }
+                    ]));
+                    localStorage.setItem('payments', JSON.stringify([]));
+                    localStorage.setItem('trials', JSON.stringify([]));
+                    localStorage.setItem('affiliates', JSON.stringify([]));
+                    localStorage.setItem('vouchers', JSON.stringify([
+                        { code: 'DISKON10', discount: 10, used: false }
+                    ]));
+                    
+                    // Logout user jika sedang login
+                    if (currentUser) {
+                        logoutUser();
+                    }
+                    
+                    const adminModal = bootstrap.Modal.getInstance(document.getElementById('adminModal'));
+                    adminModal.hide();
+                    
+                    showAlert('Data berhasil direset!', 'success');
+                } else {
+                    showAlert('Password admin salah!', 'danger');
                 }
             });
-        });
-        
-        // Link Zoom
-        document.getElementById('zoomLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Link Zoom akan tersedia setiap Jumat pukul 18.30 WIB. Silakan hubungi admin untuk info lebih lanjut.');
-        });
-        
-        // Inisialisasi UI saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', function() {
-            updateUserInterface();
-            resetInactivityTimer();
             
-            // Set link WhatsApp ke nomor yang benar
-            document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
-                link.href = 'https://wa.me/62895342517290';
+            // Cek jika admin login (username = admin)
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                const username = document.getElementById('loginUsername').value;
+                
+                if (username === 'admin') {
+                    document.getElementById('adminResetButton').style.display = 'block';
+                } else {
+                    document.getElementById('adminResetButton').style.display = 'none';
+                }
             });
+            
+            // Cek parameter referral dari URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            if (refCode) {
+                document.getElementById('affiliateCode').value = refCode;
+            }
+            
+            // Inisialisasi
+            showSection('home');
         });
     </script>
 </body>
