@@ -585,6 +585,67 @@
             margin-top: 15px;
         }
         
+        .flyer-container {
+            background: linear-gradient(135deg, var(--dark-brown) 0%, var(--earth) 100%);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .flyer-logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+            font-size: 24px;
+            color: var(--dark-brown);
+        }
+        
+        .flyer-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .flyer-code {
+            background-color: white;
+            color: var(--dark-brown);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 18px;
+            display: inline-block;
+            margin: 15px 0;
+        }
+        
+        .flyer-description {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .admin-content {
+            display: none;
+        }
+        
+        .admin-content.active {
+            display: block;
+        }
+        
+        .material-input-group {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
         @media (max-width: 768px) {
             .hero-section {
                 padding: 60px 0;
@@ -700,9 +761,9 @@
                             <p class="text-muted">Sisa percobaan: <span id="trialCount">2</span>/2</p>
                         </div>
                         <div class="d-grid gap-2">
-                            <a href="https://eongenesis-id.github.io/EONGENESIS/" target="_blank" class="btn btn-primary btn-lg" id="trialLink">
-                                <i class="fas fa-external-link-alt me-2"></i> Akses Free Trial
-                            </a>
+                            <button class="btn btn-primary btn-lg" id="useTrial">
+                                <i class="fas fa-external-link-alt me-2"></i> Gunakan Free Trial
+                            </button>
                         </div>
                         
                         <!-- Ajakan Beli Setelah Trial Habis -->
@@ -1228,34 +1289,183 @@
                     </div>
                 </div>
                 
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Bagikan Kode Affiliate</h5>
-                        <p>Gunakan link berikut untuk mengajak orang lain bergabung:</p>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="affiliateLink" readonly>
-                            <button class="btn btn-outline-secondary" type="button" id="copyAffiliateLink">
-                                <i class="fas fa-copy"></i>
-                            </button>
+                <!-- Flyer Affiliate -->
+                <div class="flyer-container">
+                    <div class="flyer-logo">EG</div>
+                    <div class="flyer-title">EonGenesis.id</div>
+                    <div class="flyer-description">Kursus Sempoa Modern dengan Teknologi AR</div>
+                    <div class="flyer-code" id="flyerAffiliateCode">KODE-AFFILIATE</div>
+                    <div class="flyer-description">Dapatkan diskon 10% dengan kode di atas</div>
+                    
+                    <div class="d-flex justify-content-center mt-4 gap-2">
+                        <button class="btn btn-light" id="shareWhatsApp">
+                            <i class="fab fa-whatsapp me-2"></i> Share ke WhatsApp
+                        </button>
+                        <button class="btn btn-light" id="downloadFlyer">
+                            <i class="fas fa-download me-2"></i> Download Flyer
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Admin Section -->
+    <div class="admin-section">
+        <div class="container my-5">
+            <h2 class="section-title">Panel Admin</h2>
+            
+            <div class="admin-menu">
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="admin-menu-item active" data-target="dashboard">Dashboard</div>
+                    <div class="admin-menu-item" data-target="links">Kelola Link</div>
+                    <div class="admin-menu-item" data-target="materials">Kelola Materi</div>
+                    <div class="admin-menu-item" data-target="videos">Kelola Video</div>
+                    <div class="admin-menu-item" data-target="users">Kelola Pengguna</div>
+                    <div class="admin-menu-item" data-target="payments">Kelola Pembayaran</div>
+                </div>
+            </div>
+            
+            <!-- Dashboard Admin -->
+            <div id="admin-dashboard" class="admin-content active">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Jumlah Pengguna</h5>
+                                <p class="card-text display-4" id="userCount">0</p>
+                            </div>
                         </div>
-                        
-                        <div class="mt-3">
-                            <h6>Bagikan melalui:</h6>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-outline-primary btn-sm">
-                                    <i class="fab fa-whatsapp me-1"></i> WhatsApp
-                                </button>
-                                <button class="btn btn-outline-primary btn-sm">
-                                    <i class="fab fa-facebook me-1"></i> Facebook
-                                </button>
-                                <button class="btn btn-outline-primary btn-sm">
-                                    <i class="fab fa-instagram me-1"></i> Instagram
-                                </button>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Penjualan</h5>
+                                <p class="card-text display-4" id="totalSales">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Pendapatan</h5>
+                                <p class="card-text display-4" id="totalRevenue">Rp 0</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+            
+            <!-- Kelola Link -->
+            <div id="admin-links" class="admin-content">
+                <h3 class="mb-4">Kelola Link</h3>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="zoomLink" class="form-label">Link Kelas Zoom</label>
+                            <input type="url" class="form-control" id="zoomLinkInput" placeholder="https://zoom.us/j/...">
+                            <div class="form-text">Link ini akan digunakan untuk kelas Zoom gratis setiap Jumat</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="arLink" class="form-label">Link Augmented Reality</label>
+                            <input type="url" class="form-control" id="arLinkInput" placeholder="https://eongenesis-id.github.io/EONGENESIS/">
+                            <div class="form-text">Link ini akan digunakan untuk akses teknologi AR</div>
+                        </div>
+                        
+                        <button class="btn btn-primary" id="saveLinks">Simpan Link</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kelola Materi -->
+            <div id="admin-materials" class="admin-content">
+                <h3 class="mb-4">Kelola Materi PDF</h3>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tambah Materi PDF</h5>
+                        
+                        <div id="pdfMaterialsContainer">
+                            <!-- Input untuk 10 materi PDF -->
+                        </div>
+                        
+                        <button class="btn btn-primary mt-3" id="savePdfMaterials">Simpan Materi PDF</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kelola Video -->
+            <div id="admin-videos" class="admin-content">
+                <h3 class="mb-4">Kelola Video Tutorial</h3>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tambah Video Tutorial</h5>
+                        
+                        <div id="videoMaterialsContainer">
+                            <!-- Input untuk 10 video tutorial -->
+                        </div>
+                        
+                        <button class="btn btn-primary mt-3" id="saveVideoMaterials">Simpan Video Tutorial</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kelola Pengguna -->
+            <div id="admin-users" class="admin-content">
+                <h3 class="mb-4">Kelola Pengguna</h3>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>WhatsApp</th>
+                                        <th>Produk</th>
+                                        <th>Tanggal Daftar</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersList">
+                                    <!-- Daftar pengguna akan dimuat di sini -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kelola Pembayaran -->
+            <div id="admin-payments" class="admin-content">
+                <h3 class="mb-4">Kelola Pembayaran</h3>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Produk</th>
+                                        <th>Harga</th>
+                                        <th>Metode</th>
+                                        <th>Status</th>
+                                        <th>Tanggal</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="paymentsList">
+                                    <!-- Daftar pembayaran akan dimuat di sini -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1322,6 +1532,20 @@
                 ]));
             }
             
+            if (!localStorage.getItem('links')) {
+                localStorage.setItem('links', JSON.stringify({
+                    zoom: 'https://zoom.us/j/1234567890',
+                    ar: 'https://eongenesis-id.github.io/EONGENESIS/'
+                }));
+            }
+            
+            if (!localStorage.getItem('materials')) {
+                localStorage.setItem('materials', JSON.stringify({
+                    pdf: [],
+                    video: []
+                }));
+            }
+            
             // Variabel global
             let currentUser = null;
             let isAdmin = false;
@@ -1366,6 +1590,80 @@
                     if (target === 'profile') {
                         updateProfileData();
                     }
+                }
+                
+                // Jika admin, load data admin
+                if (isAdmin) {
+                    loadAdminData();
+                    
+                    // Load form materials dan videos
+                    if (target === 'materials') {
+                        loadPdfMaterialsForm();
+                    }
+                    
+                    if (target === 'videos') {
+                        loadVideoMaterialsForm();
+                    }
+                }
+            }
+            
+            // Fungsi untuk load form PDF materials
+            function loadPdfMaterialsForm() {
+                const materials = JSON.parse(localStorage.getItem('materials'));
+                const pdfMaterials = materials.pdf || [];
+                const container = document.getElementById('pdfMaterialsContainer');
+                
+                container.innerHTML = '';
+                
+                for (let i = 0; i < 10; i++) {
+                    const material = pdfMaterials[i] || { title: '', file: null };
+                    
+                    const materialHtml = `
+                        <div class="material-input-group">
+                            <h6>Materi PDF ${i + 1}</h6>
+                            <div class="mb-2">
+                                <label class="form-label">Judul Materi</label>
+                                <input type="text" class="form-control pdf-title" data-index="${i}" value="${material.title}" placeholder="Judul materi PDF">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">File PDF</label>
+                                <input type="file" class="form-control pdf-file" data-index="${i}" accept=".pdf">
+                                ${material.file ? `<div class="form-text">File saat ini: <a href="${material.file}" target="_blank">Lihat</a></div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.innerHTML += materialHtml;
+                }
+            }
+            
+            // Fungsi untuk load form video materials
+            function loadVideoMaterialsForm() {
+                const materials = JSON.parse(localStorage.getItem('materials'));
+                const videoMaterials = materials.video || [];
+                const container = document.getElementById('videoMaterialsContainer');
+                
+                container.innerHTML = '';
+                
+                for (let i = 0; i < 10; i++) {
+                    const material = videoMaterials[i] || { title: '', file: null };
+                    
+                    const materialHtml = `
+                        <div class="material-input-group">
+                            <h6>Video Tutorial ${i + 1}</h6>
+                            <div class="mb-2">
+                                <label class="form-label">Judul Video</label>
+                                <input type="text" class="form-control video-title" data-index="${i}" value="${material.title}" placeholder="Judul video tutorial">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">File Video</label>
+                                <input type="file" class="form-control video-file" data-index="${i}" accept=".mp4,.mov,.avi">
+                                ${material.file ? `<div class="form-text">File saat ini: <a href="${material.file}" target="_blank">Lihat</a></div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.innerHTML += materialHtml;
                 }
             }
             
@@ -1479,6 +1777,7 @@
                 
                 // Tampilkan kode affiliate
                 document.getElementById('userAffiliateCode').textContent = currentUser.affiliateCode;
+                document.getElementById('flyerAffiliateCode').textContent = currentUser.affiliateCode;
                 
                 // Generate affiliate link
                 const affiliateLink = `${window.location.origin}${window.location.pathname}?ref=${currentUser.affiliateCode}`;
@@ -1571,13 +1870,26 @@
                     // Cek jika admin
                     if (username === 'admin' && password === 'admin123') {
                         isAdmin = true;
+                        document.querySelector('.user-section').style.display = 'none';
+                        document.querySelector('.admin-section').style.display = 'block';
                         document.getElementById('userRole').style.display = 'inline';
                         document.getElementById('userRole').textContent = 'Admin';
                         
-                        // Redirect ke halaman admin (jika ada)
+                        // Load data admin
+                        loadAdminData();
+                        loadPdfMaterialsForm();
+                        loadVideoMaterialsForm();
+                        
+                        // Load link settings
+                        const links = JSON.parse(localStorage.getItem('links'));
+                        document.getElementById('zoomLinkInput').value = links.zoom || '';
+                        document.getElementById('arLinkInput').value = links.ar || '';
+                        
                         showAlert('Login admin berhasil!', 'success');
                     } else {
                         isAdmin = false;
+                        document.querySelector('.user-section').style.display = 'block';
+                        document.querySelector('.admin-section').style.display = 'none';
                         
                         // Tampilkan badge affiliate jika ada
                         if (currentUser.affiliateCode) {
@@ -1638,6 +1950,8 @@
                 document.getElementById('userRole').style.display = 'none';
                 document.getElementById('userStatus').style.display = 'none';
                 document.getElementById('userAffiliate').style.display = 'none';
+                document.querySelector('.user-section').style.display = 'block';
+                document.querySelector('.admin-section').style.display = 'none';
                 
                 // Reset form login
                 document.getElementById('loginForm').reset();
@@ -1649,6 +1963,78 @@
                 document.getElementById('trialPromo').style.display = 'none';
                 
                 showAlert('Anda telah logout.', 'info');
+            }
+            
+            // Fungsi untuk load data admin
+            function loadAdminData() {
+                // Load data pengguna
+                const users = JSON.parse(localStorage.getItem('users'));
+                document.getElementById('userCount').textContent = users.length;
+                
+                // Load data pembayaran
+                const payments = JSON.parse(localStorage.getItem('payments'));
+                document.getElementById('totalSales').textContent = payments.length;
+                
+                // Hitung total pendapatan
+                let totalRevenue = 0;
+                payments.forEach(payment => {
+                    totalRevenue += parseInt(payment.price);
+                });
+                document.getElementById('totalRevenue').textContent = `Rp ${totalRevenue.toLocaleString('id-ID')}`;
+                
+                // Load daftar pengguna
+                const usersList = document.getElementById('usersList');
+                usersList.innerHTML = '';
+                
+                users.forEach(user => {
+                    if (user.username !== 'admin') {
+                        const products = user.products || [];
+                        const productsText = products.map(p => {
+                            switch(p) {
+                                case 'beginner': return 'Beginner';
+                                case 'intermediate': return 'Intermediate';
+                                case 'advanced': return 'Advanced';
+                                case 'ar': return 'AR';
+                                case 'pdf': return 'PDF';
+                                default: return p;
+                            }
+                        }).join(', ');
+                        
+                        usersList.innerHTML += `
+                            <tr>
+                                <td>${user.username}</td>
+                                <td>${user.whatsapp}</td>
+                                <td>${productsText || 'Tidak ada'}</td>
+                                <td>${new Date(user.registeredAt).toLocaleDateString('id-ID')}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info view-user" data-username="${user.username}">Lihat</button>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                });
+                
+                // Load daftar pembayaran
+                const paymentsList = document.getElementById('paymentsList');
+                paymentsList.innerHTML = '';
+                
+                payments.forEach(payment => {
+                    paymentsList.innerHTML += `
+                        <tr>
+                            <td>${payment.username}</td>
+                            <td>${payment.product}</td>
+                            <td>Rp ${parseInt(payment.price).toLocaleString('id-ID')}</td>
+                            <td>${payment.method}</td>
+                            <td><span class="badge bg-${payment.status === 'verified' ? 'success' : 'warning'}">${payment.status}</span></td>
+                            <td>${new Date(payment.date).toLocaleDateString('id-ID')}</td>
+                            <td>
+                                <button class="btn btn-sm btn-info view-payment" data-proof="${payment.proof}">Lihat Bukti</button>
+                                ${payment.status !== 'verified' ? 
+                                    `<button class="btn btn-sm btn-success verify-payment" data-id="${payment.date}">Verifikasi</button>` : ''}
+                            </td>
+                        </tr>
+                    `;
+                });
             }
             
             // Event listener untuk form login
@@ -1677,6 +2063,51 @@
                     const target = this.getAttribute('data-bs-target');
                     showSection(target);
                 });
+            });
+            
+            // Event listener untuk menu admin
+            document.querySelectorAll('.admin-menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Update class active
+                    document.querySelectorAll('.admin-menu-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Tampilkan content yang sesuai
+                    const target = this.getAttribute('data-target');
+                    document.querySelectorAll('.admin-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(`admin-${target}`).classList.add('active');
+                });
+            });
+            
+            // Event listener untuk penggunaan trial
+            document.getElementById('useTrial').addEventListener('click', function() {
+                const trials = JSON.parse(localStorage.getItem('trials'));
+                const userTrials = trials.filter(t => t.username === currentUser.username);
+                
+                if (userTrials.length < 2) {
+                    // Tambahkan trial
+                    trials.push({
+                        username: currentUser.username,
+                        date: new Date().toISOString()
+                    });
+                    
+                    localStorage.setItem('trials', JSON.stringify(trials));
+                    
+                    // Update tampilan
+                    document.getElementById('trialCount').textContent = 2 - (userTrials.length + 1);
+                    
+                    // Redirect ke AR
+                    const links = JSON.parse(localStorage.getItem('links'));
+                    window.open(links.ar, '_blank');
+                    
+                    if (userTrials.length + 1 >= 2) {
+                        // Trial habis
+                        document.getElementById('trialContent').style.display = 'none';
+                        document.getElementById('trialPromo').style.display = 'block';
+                    }
+                }
             });
             
             // Event listener untuk pendaftaran
@@ -1895,7 +2326,8 @@
                 // Jika yang dibeli adalah Akses Link AR, redirect ke halaman AR
                 if (productKey === 'ar') {
                     setTimeout(() => {
-                        window.open('https://eongenesis-id.github.io/EONGENESIS/', '_blank');
+                        const links = JSON.parse(localStorage.getItem('links'));
+                        window.open(links.ar, '_blank');
                     }, 2000);
                 }
             });
@@ -1939,21 +2371,30 @@
                     }
                     
                     // Redirect ke materi berdasarkan produk
+                    const materials = JSON.parse(localStorage.getItem('materials'));
+                    
                     switch(productKey) {
                         case 'beginner':
-                            window.open('https://eongenesis-id.github.io/EONGENESIS/beginner', '_blank');
-                            break;
                         case 'intermediate':
-                            window.open('https://eongenesis-id.github.io/EONGENESIS/intermediate', '_blank');
-                            break;
                         case 'advanced':
-                            window.open('https://eongenesis-id.github.io/EONGENESIS/advanced', '_blank');
+                            if (materials.pdf && materials.pdf.length > 0) {
+                                // Buka PDF pertama sebagai contoh
+                                window.open(materials.pdf[0].file, '_blank');
+                            } else {
+                                showAlert('Materi belum tersedia.', 'info');
+                            }
                             break;
                         case 'ar':
-                            window.open('https://eongenesis-id.github.io/EONGENESIS/', '_blank');
+                            const links = JSON.parse(localStorage.getItem('links'));
+                            window.open(links.ar, '_blank');
                             break;
                         case 'pdf':
-                            window.open('https://eongenesis-id.github.io/EONGENESIS/pdf', '_blank');
+                            if (materials.pdf && materials.pdf.length > 0) {
+                                // Buka PDF pertama sebagai contoh
+                                window.open(materials.pdf[0].file, '_blank');
+                            } else {
+                                showAlert('Materi belum tersedia.', 'info');
+                            }
                             break;
                     }
                 });
@@ -1974,11 +2415,82 @@
                 });
             });
             
-            document.getElementById('copyAffiliateLink').addEventListener('click', function() {
-                const link = document.getElementById('affiliateLink').value;
-                navigator.clipboard.writeText(link).then(() => {
-                    showAlert('Link affiliate berhasil disalin!', 'success');
+            // Event listener untuk share WhatsApp
+            document.getElementById('shareWhatsApp').addEventListener('click', function() {
+                const code = document.getElementById('flyerAffiliateCode').textContent;
+                const message = `Hai! Saya ingin berbagi kode affiliate untuk kursus sempoa EonGenesis.id. Gunakan kode ${code} untuk mendapatkan diskon 10%!`;
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // Event listener untuk download flyer
+            document.getElementById('downloadFlyer').addEventListener('click', function() {
+                // Simulasi download flyer
+                showAlert('Flyer affiliate berhasil didownload!', 'success');
+            });
+            
+            // Event listener untuk simpan link
+            document.getElementById('saveLinks').addEventListener('click', function() {
+                const zoomLink = document.getElementById('zoomLinkInput').value;
+                const arLink = document.getElementById('arLinkInput').value;
+                
+                const links = {
+                    zoom: zoomLink,
+                    ar: arLink
+                };
+                
+                localStorage.setItem('links', JSON.stringify(links));
+                showAlert('Link berhasil disimpan!', 'success');
+            });
+            
+            // Event listener untuk simpan materi PDF
+            document.getElementById('savePdfMaterials').addEventListener('click', function() {
+                const materials = JSON.parse(localStorage.getItem('materials'));
+                const pdfInputs = document.querySelectorAll('.pdf-title');
+                
+                materials.pdf = [];
+                
+                pdfInputs.forEach(input => {
+                    const index = input.getAttribute('data-index');
+                    const title = input.value;
+                    const fileInput = document.querySelector(`.pdf-file[data-index="${index}"]`);
+                    const file = fileInput.files[0];
+                    
+                    if (title || file) {
+                        materials.pdf.push({
+                            title: title,
+                            file: file ? URL.createObjectURL(file) : materials.pdf[index]?.file || null
+                        });
+                    }
                 });
+                
+                localStorage.setItem('materials', JSON.stringify(materials));
+                showAlert('Materi PDF berhasil disimpan!', 'success');
+            });
+            
+            // Event listener untuk simpan video tutorial
+            document.getElementById('saveVideoMaterials').addEventListener('click', function() {
+                const materials = JSON.parse(localStorage.getItem('materials'));
+                const videoInputs = document.querySelectorAll('.video-title');
+                
+                materials.video = [];
+                
+                videoInputs.forEach(input => {
+                    const index = input.getAttribute('data-index');
+                    const title = input.value;
+                    const fileInput = document.querySelector(`.video-file[data-index="${index}"]`);
+                    const file = fileInput.files[0];
+                    
+                    if (title || file) {
+                        materials.video.push({
+                            title: title,
+                            file: file ? URL.createObjectURL(file) : materials.video[index]?.file || null
+                        });
+                    }
+                });
+                
+                localStorage.setItem('materials', JSON.stringify(materials));
+                showAlert('Video tutorial berhasil disimpan!', 'success');
             });
             
             // Event listener untuk tombol reset admin
@@ -1991,6 +2503,8 @@
                     localStorage.removeItem('trials');
                     localStorage.removeItem('affiliates');
                     localStorage.removeItem('vouchers');
+                    localStorage.removeItem('links');
+                    localStorage.removeItem('materials');
                     
                     // Reset ke state awal
                     localStorage.setItem('users', JSON.stringify([
@@ -2008,6 +2522,14 @@
                     localStorage.setItem('vouchers', JSON.stringify([
                         { code: 'DISKON10', discount: 10, used: false }
                     ]));
+                    localStorage.setItem('links', JSON.stringify({
+                        zoom: 'https://zoom.us/j/1234567890',
+                        ar: 'https://eongenesis-id.github.io/EONGENESIS/'
+                    }));
+                    localStorage.setItem('materials', JSON.stringify({
+                        pdf: [],
+                        video: []
+                    }));
                     
                     // Logout user jika sedang login
                     if (currentUser) {
