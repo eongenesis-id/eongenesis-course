@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --nude: #E8D6C0;
@@ -646,6 +647,19 @@
             border-radius: 8px;
         }
         
+        .payment-proof {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .sales-chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 30px;
+        }
+        
         @media (max-width: 768px) {
             .hero-section {
                 padding: 60px 0;
@@ -860,6 +874,25 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="button" class="btn btn-primary" id="confirmPayment">Konfirmasi Pembayaran</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Lihat Bukti Pembayaran -->
+    <div class="modal fade" id="proofModal" tabindex="-1" aria-labelledby="proofModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="proofModalLabel">Bukti Pembayaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="proofImage" src="" alt="Bukti Pembayaran" class="payment-proof">
+                    <div class="mt-3" id="proofDetails"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -1304,6 +1337,9 @@
                         <button class="btn btn-light" id="downloadFlyer">
                             <i class="fas fa-download me-2"></i> Download Flyer
                         </button>
+                        <button class="btn btn-light" id="generateFlyer">
+                            <i class="fas fa-image me-2"></i> Generate Flyer
+                        </button>
                     </div>
                 </div>
             </section>
@@ -1351,6 +1387,16 @@
                                 <h5 class="card-title">Pendapatan</h5>
                                 <p class="card-text display-4" id="totalRevenue">Rp 0</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grafik Penjualan -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Grafik Penjualan Bulanan</h5>
+                        <div class="sales-chart-container">
+                            <canvas id="salesChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -1550,6 +1596,7 @@
             let currentUser = null;
             let isAdmin = false;
             let appliedVoucher = null;
+            let salesChart = null;
             
             // Fungsi untuk menampilkan notifikasi
             function showAlert(message, type = 'success') {
@@ -1603,6 +1650,11 @@
                     
                     if (target === 'videos') {
                         loadVideoMaterialsForm();
+                    }
+                    
+                    // Jika dashboard, update grafik penjualan
+                    if (target === 'dashboard') {
+                        updateSalesChart();
                     }
                 }
             }
@@ -1712,6 +1764,30 @@
                         badge.textContent = 'Akses Tersedia';
                         badge.classList.remove('access-badge');
                         badge.classList.add('paid-badge');
+                    }
+                });
+            }
+            
+            // Fungsi untuk update tombol "Beli Sekarang" menjadi "Akses Materi" untuk produk yang sudah dibeli
+            function updateBuyButtons() {
+                if (!currentUser || !currentUser.products) return;
+                
+                const products = currentUser.products;
+                const buttons = document.querySelectorAll('.buy-btn');
+                
+                buttons.forEach(button => {
+                    const productKey = button.getAttribute('data-product-key');
+                    if (products.includes(productKey)) {
+                        button.textContent = 'Akses Materi';
+                        button.classList.remove('btn-primary');
+                        button.classList.add('btn-success');
+                        button.setAttribute('data-bs-target', '#');
+                        button.onclick = function() {
+                            // Redirect ke katalog
+                            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                            document.querySelector('.nav-link[data-bs-target="catalog"]').classList.add('active');
+                            showSection('catalog');
+                        };
                     }
                 });
             }
@@ -1901,6 +1977,9 @@
                             document.getElementById('userStatus').style.display = 'inline';
                             document.getElementById('profileStatusBadge').style.display = 'block';
                         }
+                        
+                        // Update tombol beli
+                        updateBuyButtons();
                     }
                     
                     // Update UI setelah login
@@ -2025,15 +2104,92 @@
                             <td>${payment.product}</td>
                             <td>Rp ${parseInt(payment.price).toLocaleString('id-ID')}</td>
                             <td>${payment.method}</td>
-                            <td><span class="badge bg-${payment.status === 'verified' ? 'success' : 'warning'}">${payment.status}</span></td>
+                            <td><span class="badge bg-${payment.status === 'verified' ? 'success' : payment.status === 'rejected' ? 'danger' : 'warning'}">${payment.status}</span></td>
                             <td>${new Date(payment.date).toLocaleDateString('id-ID')}</td>
                             <td>
-                                <button class="btn btn-sm btn-info view-payment" data-proof="${payment.proof}">Lihat Bukti</button>
-                                ${payment.status !== 'verified' ? 
-                                    `<button class="btn btn-sm btn-success verify-payment" data-id="${payment.date}">Verifikasi</button>` : ''}
+                                <button class="btn btn-sm btn-info view-payment" data-proof="${payment.proof}" data-username="${payment.username}" data-product="${payment.product}" data-date="${payment.date}">Lihat Bukti</button>
+                                ${payment.status === 'pending' ? 
+                                    `<button class="btn btn-sm btn-success verify-payment" data-id="${payment.date}" data-action="verify">Verifikasi</button>
+                                     <button class="btn btn-sm btn-danger verify-payment" data-id="${payment.date}" data-action="reject">Tolak</button>` : ''}
                             </td>
                         </tr>
                     `;
+                });
+            }
+            
+            // Fungsi untuk update grafik penjualan
+            function updateSalesChart() {
+                const payments = JSON.parse(localStorage.getItem('payments'));
+                const verifiedPayments = payments.filter(p => p.status === 'verified');
+                
+                // Kelompokkan pembayaran berdasarkan bulan
+                const monthlySales = {};
+                verifiedPayments.forEach(payment => {
+                    const date = new Date(payment.date);
+                    const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`;
+                    
+                    if (!monthlySales[monthYear]) {
+                        monthlySales[monthYear] = 0;
+                    }
+                    
+                    monthlySales[monthYear] += parseInt(payment.price);
+                });
+                
+                // Urutkan berdasarkan bulan
+                const sortedMonths = Object.keys(monthlySales).sort();
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+                
+                const labels = sortedMonths.map(month => {
+                    const [year, monthNum] = month.split('-');
+                    return `${monthNames[parseInt(monthNum) - 1]} ${year}`;
+                });
+                
+                const data = sortedMonths.map(month => monthlySales[month]);
+                
+                // Buat atau update chart
+                const ctx = document.getElementById('salesChart').getContext('2d');
+                
+                if (salesChart) {
+                    salesChart.destroy();
+                }
+                
+                salesChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Penjualan per Bulan',
+                            data: data,
+                            backgroundColor: 'rgba(139, 90, 43, 0.2)',
+                            borderColor: 'rgba(139, 90, 43, 1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'Rp ' + value.toLocaleString('id-ID');
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Rp ' + context.raw.toLocaleString('id-ID');
+                                    }
+                                }
+                            }
+                        }
+                    }
                 });
             }
             
@@ -2187,6 +2343,15 @@
                     const productPrice = this.getAttribute('data-price');
                     const productKey = this.getAttribute('data-product-key');
                     
+                    // Cek apakah produk sudah dibeli
+                    if (currentUser.products && currentUser.products.includes(productKey)) {
+                        // Redirect ke katalog
+                        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                        document.querySelector('.nav-link[data-bs-target="catalog"]').classList.add('active');
+                        showSection('catalog');
+                        return;
+                    }
+                    
                     document.getElementById('paymentProductName').textContent = productName;
                     document.getElementById('paymentProductPrice').textContent = `Rp ${parseInt(productPrice).toLocaleString('id-ID')}`;
                     
@@ -2290,46 +2455,11 @@
                     }
                 }
                 
-                // Tambahkan produk ke user jika belum ada
-                if (productKey && !currentUser.products.includes(productKey)) {
-                    const users = JSON.parse(localStorage.getItem('users'));
-                    const userIndex = users.findIndex(u => u.username === currentUser.username);
-                    
-                    if (!users[userIndex].products) {
-                        users[userIndex].products = [];
-                    }
-                    
-                    users[userIndex].products.push(productKey);
-                    localStorage.setItem('users', JSON.stringify(users));
-                    
-                    // Update currentUser
-                    currentUser = users[userIndex];
-                    
-                    // Update UI
-                    updateMaterialAccess();
-                    updateProductBadges();
-                    updateUserProducts();
-                    
-                    // Tampilkan badge premium jika belum ada
-                    if (currentUser.products && currentUser.products.length > 0) {
-                        document.getElementById('userStatus').style.display = 'inline';
-                        document.getElementById('profileStatusBadge').style.display = 'block';
-                    }
-                }
-                
                 // Tutup modal
                 const paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
                 paymentModal.hide();
                 
                 showAlert('Pembayaran berhasil dikonfirmasi! Produk akan segera diaktifkan setelah verifikasi.', 'success');
-                
-                // Jika yang dibeli adalah Akses Link AR, redirect ke halaman AR
-                if (productKey === 'ar') {
-                    setTimeout(() => {
-                        const links = JSON.parse(localStorage.getItem('links'));
-                        window.open(links.ar, '_blank');
-                    }, 2000);
-                }
             });
             
             // Event listener untuk tombol beli setelah trial habis
@@ -2429,6 +2559,60 @@
                 showAlert('Flyer affiliate berhasil didownload!', 'success');
             });
             
+            // Event listener untuk generate flyer
+            document.getElementById('generateFlyer').addEventListener('click', function() {
+                const code = document.getElementById('flyerAffiliateCode').textContent;
+                
+                // Membuat canvas untuk flyer
+                const canvas = document.createElement('canvas');
+                canvas.width = 1080;
+                canvas.height = 1920;
+                const ctx = canvas.getContext('2d');
+                
+                // Background gradient
+                const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
+                gradient.addColorStop(0, '#4A2C2A');
+                gradient.addColorStop(1, '#A86F4C');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 1080, 1920);
+                
+                // Logo
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 80px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('EG', 540, 300);
+                
+                // Title
+                ctx.font = 'bold 60px Arial';
+                ctx.fillText('EonGenesis.id', 540, 450);
+                
+                // Description
+                ctx.font = '30px Arial';
+                ctx.fillText('Kursus Sempoa Modern dengan', 540, 550);
+                ctx.fillText('Teknologi AR', 540, 600);
+                
+                // Affiliate code box
+                ctx.fillStyle = 'white';
+                ctx.fillRect(340, 700, 400, 100);
+                ctx.fillStyle = '#4A2C2A';
+                ctx.font = 'bold 40px Arial';
+                ctx.fillText(code, 540, 765);
+                
+                // Description
+                ctx.fillStyle = 'white';
+                ctx.font = '30px Arial';
+                ctx.fillText('Dapatkan diskon 10% dengan kode di atas', 540, 850);
+                
+                // Convert to image and download
+                const dataUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `flyer-affiliate-${code}.png`;
+                link.href = dataUrl;
+                link.click();
+                
+                showAlert('Flyer affiliate berhasil digenerate!', 'success');
+            });
+            
             // Event listener untuk simpan link
             document.getElementById('saveLinks').addEventListener('click', function() {
                 const zoomLink = document.getElementById('zoomLinkInput').value;
@@ -2440,6 +2624,10 @@
                 };
                 
                 localStorage.setItem('links', JSON.stringify(links));
+                
+                // Update link di user section
+                document.getElementById('zoomLink').href = zoomLink;
+                
                 showAlert('Link berhasil disimpan!', 'success');
             });
             
@@ -2492,6 +2680,78 @@
                 localStorage.setItem('materials', JSON.stringify(materials));
                 showAlert('Video tutorial berhasil disimpan!', 'success');
             });
+            
+            // Event listener untuk lihat bukti pembayaran
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('view-payment')) {
+                    const proof = e.target.getAttribute('data-proof');
+                    const username = e.target.getAttribute('data-username');
+                    const product = e.target.getAttribute('data-product');
+                    const date = e.target.getAttribute('data-date');
+                    
+                    document.getElementById('proofImage').src = proof;
+                    document.getElementById('proofDetails').innerHTML = `
+                        <p><strong>User:</strong> ${username}</p>
+                        <p><strong>Produk:</strong> ${product}</p>
+                        <p><strong>Tanggal:</strong> ${new Date(date).toLocaleDateString('id-ID')}</p>
+                    `;
+                    
+                    const proofModal = new bootstrap.Modal(document.getElementById('proofModal'));
+                    proofModal.show();
+                }
+            });
+            
+            // Event listener untuk verifikasi pembayaran
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('verify-payment')) {
+                    const paymentId = e.target.getAttribute('data-id');
+                    const action = e.target.getAttribute('data-action');
+                    const payments = JSON.parse(localStorage.getItem('payments'));
+                    const paymentIndex = payments.findIndex(p => p.date === paymentId);
+                    
+                    if (paymentIndex !== -1) {
+                        if (action === 'verify') {
+                            payments[paymentIndex].status = 'verified';
+                            
+                            // Tambahkan produk ke user
+                            const users = JSON.parse(localStorage.getItem('users'));
+                            const userIndex = users.findIndex(u => u.username === payments[paymentIndex].username);
+                            const productKey = getProductKey(payments[paymentIndex].product);
+                            
+                            if (userIndex !== -1 && productKey) {
+                                if (!users[userIndex].products) {
+                                    users[userIndex].products = [];
+                                }
+                                
+                                if (!users[userIndex].products.includes(productKey)) {
+                                    users[userIndex].products.push(productKey);
+                                    localStorage.setItem('users', JSON.stringify(users));
+                                }
+                            }
+                            
+                            showAlert('Pembayaran berhasil diverifikasi!', 'success');
+                        } else if (action === 'reject') {
+                            payments[paymentIndex].status = 'rejected';
+                            showAlert('Pembayaran ditolak!', 'success');
+                        }
+                        
+                        localStorage.setItem('payments', JSON.stringify(payments));
+                        loadAdminData();
+                    }
+                }
+            });
+            
+            // Helper function untuk mendapatkan product key dari product name
+            function getProductKey(productName) {
+                switch(productName) {
+                    case 'Beginner Sempoa': return 'beginner';
+                    case 'Intermediate Sempoa': return 'intermediate';
+                    case 'Advanced Sempoa': return 'advanced';
+                    case 'Akses Link AR': return 'ar';
+                    case 'Materi PDF': return 'pdf';
+                    default: return null;
+                }
+            }
             
             // Event listener untuk tombol reset admin
             document.getElementById('confirmReset').addEventListener('click', function() {
@@ -2565,6 +2825,12 @@
             
             // Inisialisasi
             showSection('home');
+            
+            // Load link zoom
+            const links = JSON.parse(localStorage.getItem('links'));
+            if (links && links.zoom) {
+                document.getElementById('zoomLink').href = links.zoom;
+            }
         });
     </script>
 </body>
