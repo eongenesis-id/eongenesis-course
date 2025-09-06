@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --nude: #E8D6C0;
@@ -660,6 +661,142 @@
             margin-bottom: 30px;
         }
         
+        .test-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .test-question {
+            margin-bottom: 15px;
+        }
+        
+        .test-options {
+            margin-left: 20px;
+        }
+        
+        .test-result {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--brown);
+        }
+        
+        .flyer-image {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .flyer-modal .modal-dialog {
+            max-width: 500px;
+        }
+        
+        .flyer-modal .modal-body {
+            text-align: center;
+        }
+        
+        .instagram-story {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px auto;
+        }
+        
+        .story-content {
+            padding: 40px;
+            color: white;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .story-logo {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-weight: bold;
+            font-size: 30px;
+            color: var(--dark-brown);
+        }
+        
+        .story-kids-image {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        
+        .story-affiliate-code {
+            background-color: white;
+            color: var(--dark-brown);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 20px;
+            display: inline-block;
+            margin: 15px 0;
+        }
+        
+        .story-handle {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .invoice-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .invoice-details {
+            margin-bottom: 20px;
+        }
+        
+        .invoice-table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .invoice-table th, .invoice-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .invoice-total {
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
         @media (max-width: 768px) {
             .hero-section {
                 padding: 60px 0;
@@ -681,6 +818,14 @@
             .qr-code {
                 width: 150px;
                 height: 150px;
+            }
+            
+            .instagram-story {
+                height: 500px;
+            }
+            
+            .story-content {
+                padding: 20px;
             }
         }
     </style>
@@ -792,7 +937,7 @@
                         <div class="mt-4">
                             <h5>Jika mengalami masalah:</h5>
                             <ol>
-                                <li>Pastikan koneksi internet Anda stabil</li>
+                                <li>Pastikan koneksi internet Anda stable</li>
                                 <li>Coba buka link di browser yang berbeda</li>
                                 <li>Hubungi kami jika masalah tetap berlanjut</li>
                             </ol>
@@ -893,6 +1038,77 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Flyer Instagram Story -->
+    <div class="modal fade flyer-modal" id="flyerModal" tabindex="-1" aria-labelledby="flyerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="flyerModalLabel">Flyer Instagram Story</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="instagram-story" id="instagramStory">
+                        <div class="story-content">
+                            <div class="story-logo">EG</div>
+                            <h3>EonGenesis.id</h3>
+                            <p>Kursus Sempoa Modern dengan Teknologi AR</p>
+                            <img src="https://images.unsplash.com/photo-1585432959449-b1c9c8cc49ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Anak-anak belajar sempoa AR" class="story-kids-image">
+                            <div class="story-affiliate-code" id="storyAffiliateCode">KODE-AFFILIATE</div>
+                            <p>Gunakan kode di atas untuk mendapatkan diskon 10%</p>
+                            <div class="story-handle">@eongenesis.id</div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" id="downloadStory">
+                            <i class="fas fa-download me-2"></i> Download Story
+                        </button>
+                        <button class="btn btn-outline-primary" id="shareStory">
+                            <i class="fab fa-instagram me-2"></i> Bagikan ke Instagram Story
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Test (Pre-test/Post-test) -->
+    <div class="modal fade" id="testModal" tabindex="-1" aria-labelledby="testModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="testModalLabel">Test</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="testContent">
+                        <!-- Konten test akan dimuat di sini -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Invoice -->
+    <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invoiceModalLabel">Invoice Pembayaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="invoice-container" id="invoiceContent">
+                        <!-- Konten invoice akan dimuat di sini -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" id="printInvoice">Print Invoice</button>
                 </div>
             </div>
         </div>
@@ -1188,7 +1404,7 @@
                         <div class="card product-card">
                             <div class="card-body">
                                 <h5 class="card-title">Materi PDF</h5>
-                                <p class="card-text">Materi pembelajaran dalam format PDF yang dapat diunduh dan dipelajari offline.</p>
+                                <p class="card-text">Materi pembelajaran dalam format PDF yang dapat dilihat dan dicetak.</p>
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div>
                                         <span class="price-discount">Rp 50.000</span>
@@ -1224,7 +1440,11 @@
                             <li><i class="fas fa-file-pdf me-2"></i> Pengurangan Sederhana</li>
                             <li><i class="fas fa-video me-2"></i> Video Tutorial Level 1</li>
                         </ul>
-                        <a href="#" class="btn btn-sm btn-success access-material-btn" data-product="beginner">Akses Materi</a>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-success access-material-btn" data-product="beginner">Akses Materi</button>
+                            <button class="btn btn-sm btn-outline-primary take-test-btn" data-test-type="pre" data-product="beginner">Pre-test</button>
+                            <button class="btn btn-sm btn-outline-primary take-test-btn" data-test-type="post" data-product="beginner">Post-test</button>
+                        </div>
                     </div>
                 </div>
                 
@@ -1249,7 +1469,7 @@
                 <!-- Materi PDF -->
                 <div class="material-item material-locked" id="material-pdf">
                     <h4>Materi PDF</h4>
-                    <p>Kumpulan materi PDF yang dapat diunduh untuk belajar offline.</p>
+                    <p>Kumpulan materi PDF yang dapat dilihat dan dicetak.</p>
                 </div>
             </section>
 
@@ -1334,11 +1554,8 @@
                         <button class="btn btn-light" id="shareWhatsApp">
                             <i class="fab fa-whatsapp me-2"></i> Share ke WhatsApp
                         </button>
-                        <button class="btn btn-light" id="downloadFlyer">
-                            <i class="fas fa-download me-2"></i> Download Flyer
-                        </button>
                         <button class="btn btn-light" id="generateFlyer">
-                            <i class="fas fa-image me-2"></i> Generate Flyer
+                            <i class="fas fa-image me-2"></i> Generate Flyer Instagram
                         </button>
                     </div>
                 </div>
@@ -1359,6 +1576,7 @@
                     <div class="admin-menu-item" data-target="videos">Kelola Video</div>
                     <div class="admin-menu-item" data-target="users">Kelola Pengguna</div>
                     <div class="admin-menu-item" data-target="payments">Kelola Pembayaran</div>
+                    <div class="admin-menu-item" data-target="tests">Kelola Test</div>
                 </div>
             </div>
             
@@ -1512,6 +1730,41 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Kelola Test -->
+            <div id="admin-tests" class="admin-content">
+                <h3 class="mb-4">Kelola Test</h3>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Kelola Soal Pre-test dan Post-test</h5>
+                        
+                        <ul class="nav nav-tabs" id="testTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pretest-tab" data-bs-toggle="tab" data-bs-target="#pretest" type="button" role="tab">Pre-test</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="posttest-tab" data-bs-toggle="tab" data-bs-target="#posttest" type="button" role="tab">Post-test</button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content" id="testTabContent">
+                            <div class="tab-pane fade show active" id="pretest" role="tabpanel">
+                                <div id="pretestContainer" class="mt-3">
+                                    <!-- Input untuk 10 soal pre-test -->
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="posttest" role="tabpanel">
+                                <div id="posttestContainer" class="mt-3">
+                                    <!-- Input untuk 10 soal post-test -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary mt-3" id="saveTests">Simpan Soal Test</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1592,6 +1845,13 @@
                 }));
             }
             
+            if (!localStorage.getItem('tests')) {
+                localStorage.setItem('tests', JSON.stringify({
+                    pretest: [],
+                    posttest: []
+                }));
+            }
+            
             // Variabel global
             let currentUser = null;
             let isAdmin = false;
@@ -1650,6 +1910,10 @@
                     
                     if (target === 'videos') {
                         loadVideoMaterialsForm();
+                    }
+                    
+                    if (target === 'tests') {
+                        loadTestForms();
                     }
                     
                     // Jika dashboard, update grafik penjualan
@@ -1716,6 +1980,87 @@
                     `;
                     
                     container.innerHTML += materialHtml;
+                }
+            }
+            
+            // Fungsi untuk load form test
+            function loadTestForms() {
+                const tests = JSON.parse(localStorage.getItem('tests'));
+                const pretest = tests.pretest || [];
+                const posttest = tests.posttest || [];
+                
+                const pretestContainer = document.getElementById('pretestContainer');
+                const posttestContainer = document.getElementById('posttestContainer');
+                
+                pretestContainer.innerHTML = '';
+                posttestContainer.innerHTML = '';
+                
+                // Load pre-test
+                for (let i = 0; i < 10; i++) {
+                    const question = pretest[i] || { question: '', options: ['', '', '', ''], answer: 0 };
+                    
+                    const questionHtml = `
+                        <div class="material-input-group">
+                            <h6>Soal Pre-test ${i + 1}</h6>
+                            <div class="mb-2">
+                                <label class="form-label">Pertanyaan</label>
+                                <input type="text" class="form-control pretest-question" data-index="${i}" value="${question.question}" placeholder="Masukkan pertanyaan">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Opsi Jawaban</label>
+                                ${question.options.map((option, idx) => `
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-text">${idx + 1}</span>
+                                        <input type="text" class="form-control pretest-option" data-index="${i}" data-option="${idx}" value="${option}" placeholder="Opsi jawaban ${idx + 1}">
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Jawaban Benar</label>
+                                <select class="form-control pretest-answer" data-index="${i}">
+                                    ${question.options.map((_, idx) => `
+                                        <option value="${idx}" ${question.answer === idx ? 'selected' : ''}>Opsi ${idx + 1}</option>
+                                    `).join('')}
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                    
+                    pretestContainer.innerHTML += questionHtml;
+                }
+                
+                // Load post-test
+                for (let i = 0; i < 10; i++) {
+                    const question = posttest[i] || { question: '', options: ['', '', '', ''], answer: 0 };
+                    
+                    const questionHtml = `
+                        <div class="material-input-group">
+                            <h6>Soal Post-test ${i + 1}</h6>
+                            <div class="mb-2">
+                                <label class="form-label">Pertanyaan</label>
+                                <input type="text" class="form-control posttest-question" data-index="${i}" value="${question.question}" placeholder="Masukkan pertanyaan">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Opsi Jawaban</label>
+                                ${question.options.map((option, idx) => `
+                                    <div class="input-group mb-1">
+                                        <span class="input-group-text">${idx + 1}</span>
+                                        <input type="text" class="form-control posttest-option" data-index="${i}" data-option="${idx}" value="${option}" placeholder="Opsi jawaban ${idx + 1}">
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Jawaban Benar</label>
+                                <select class="form-control posttest-answer" data-index="${i}">
+                                    ${question.options.map((_, idx) => `
+                                        <option value="${idx}" ${question.answer === idx ? 'selected' : ''}>Opsi ${idx + 1}</option>
+                                    `).join('')}
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                    
+                    posttestContainer.innerHTML += questionHtml;
                 }
             }
             
@@ -1854,10 +2199,10 @@
                 // Tampilkan kode affiliate
                 document.getElementById('userAffiliateCode').textContent = currentUser.affiliateCode;
                 document.getElementById('flyerAffiliateCode').textContent = currentUser.affiliateCode;
+                document.getElementById('storyAffiliateCode').textContent = currentUser.affiliateCode;
                 
                 // Generate affiliate link
                 const affiliateLink = `${window.location.origin}${window.location.pathname}?ref=${currentUser.affiliateCode}`;
-                document.getElementById('affiliateLink').value = affiliateLink;
                 
                 // Hitung jumlah pengguna yang mendaftar dengan kode affiliate ini
                 const users = JSON.parse(localStorage.getItem('users'));
@@ -1955,6 +2300,7 @@
                         loadAdminData();
                         loadPdfMaterialsForm();
                         loadVideoMaterialsForm();
+                        loadTestForms();
                         
                         // Load link settings
                         const links = JSON.parse(localStorage.getItem('links'));
@@ -2191,6 +2537,195 @@
                         }
                     }
                 });
+            }
+            
+            // Fungsi untuk menampilkan test
+            function showTest(testType, productKey) {
+                if (!currentUser) {
+                    showAlert('Silakan login terlebih dahulu untuk mengikuti test.', 'warning');
+                    return;
+                }
+                
+                if (!currentUser.products || !currentUser.products.includes(productKey)) {
+                    showAlert('Anda belum membeli produk ini. Silakan beli terlebih dahulu.', 'warning');
+                    return;
+                }
+                
+                const tests = JSON.parse(localStorage.getItem('tests'));
+                const testQuestions = tests[testType === 'pre' ? 'pretest' : 'posttest'];
+                
+                if (testQuestions.length === 0) {
+                    showAlert('Soal test belum tersedia.', 'info');
+                    return;
+                }
+                
+                let testHtml = `
+                    <h4 class="text-center">${testType === 'pre' ? 'Pre-test' : 'Post-test'} - ${getProductName(productKey)}</h4>
+                    <form id="testForm">
+                `;
+                
+                testQuestions.forEach((question, index) => {
+                    testHtml += `
+                        <div class="test-question">
+                            <p><strong>${index + 1}. ${question.question}</strong></p>
+                            <div class="test-options">
+                                ${question.options.map((option, idx) => `
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="question${index}" id="q${index}option${idx}" value="${idx}" required>
+                                        <label class="form-check-label" for="q${index}option${idx}">
+                                            ${option}
+                                        </label>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                testHtml += `
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Submit Test</button>
+                        </div>
+                    </form>
+                    <div class="test-result" id="testResult" style="display: none;">
+                        <h4>Hasil Test</h4>
+                        <div class="score-display" id="testScore">0/10</div>
+                        <p id="testFeedback"></p>
+                        <button class="btn btn-outline-primary mt-3" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                `;
+                
+                document.getElementById('testContent').innerHTML = testHtml;
+                document.getElementById('testModalLabel').textContent = `${testType === 'pre' ? 'Pre-test' : 'Post-test'} - ${getProductName(productKey)}`;
+                
+                const testModal = new bootstrap.Modal(document.getElementById('testModal'));
+                testModal.show();
+                
+                // Event listener untuk submit test
+                document.getElementById('testForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    let score = 0;
+                    const formData = new FormData(this);
+                    
+                    testQuestions.forEach((question, index) => {
+                        const userAnswer = parseInt(formData.get(`question${index}`));
+                        if (userAnswer === question.answer) {
+                            score++;
+                        }
+                    });
+                    
+                    const percentage = (score / testQuestions.length) * 100;
+                    let feedback = '';
+                    
+                    if (percentage >= 80) {
+                        feedback = 'Selamat! Anda telah lulus test dengan nilai yang sangat baik.';
+                    } else if (percentage >= 60) {
+                        feedback = 'Anda telah lulus test. Pertahankan dan terus belajar!';
+                    } else {
+                        feedback = 'Maaf, Anda belum lulus test. Silakan pelajari materi kembali dan coba lagi.';
+                    }
+                    
+                    document.getElementById('testForm').style.display = 'none';
+                    document.getElementById('testResult').style.display = 'block';
+                    document.getElementById('testScore').textContent = `${score}/${testQuestions.length}`;
+                    document.getElementById('testFeedback').textContent = feedback;
+                    
+                    // Simpan hasil test
+                    if (!currentUser.testResults) {
+                        currentUser.testResults = {};
+                    }
+                    
+                    if (!currentUser.testResults[productKey]) {
+                        currentUser.testResults[productKey] = {};
+                    }
+                    
+                    currentUser.testResults[productKey][testType] = {
+                        score: score,
+                        total: testQuestions.length,
+                        date: new Date().toISOString()
+                    };
+                    
+                    // Update user data
+                    const users = JSON.parse(localStorage.getItem('users'));
+                    const userIndex = users.findIndex(u => u.username === currentUser.username);
+                    if (userIndex !== -1) {
+                        users[userIndex] = currentUser;
+                        localStorage.setItem('users', JSON.stringify(users));
+                    }
+                });
+            }
+            
+            // Fungsi untuk mendapatkan nama produk dari key
+            function getProductName(productKey) {
+                switch(productKey) {
+                    case 'beginner': return 'Beginner Sempoa';
+                    case 'intermediate': return 'Intermediate Sempoa';
+                    case 'advanced': return 'Advanced Sempoa';
+                    case 'ar': return 'Akses Link AR';
+                    case 'pdf': return 'Materi PDF';
+                    default: return productKey;
+                }
+            }
+            
+            // Fungsi untuk generate invoice
+            function generateInvoice(paymentData) {
+                const invoiceContent = document.getElementById('invoiceContent');
+                
+                const invoiceHtml = `
+                    <div class="invoice-header">
+                        <h3>EonGenesis.id</h3>
+                        <p>Kursus Sempoa Modern dengan Teknologi AR</p>
+                        <p>Invoice: INV-${new Date().getTime()}</p>
+                    </div>
+                    
+                    <div class="invoice-details">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Detail Pelanggan:</h5>
+                                <p>Nama: ${paymentData.username}</p>
+                                <p>WhatsApp: ${currentUser.whatsapp}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Detail Pembayaran:</h5>
+                                <p>Tanggal: ${new Date(paymentData.date).toLocaleDateString('id-ID')}</p>
+                                <p>Status: <span class="text-success">Lunas</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <th>Deskripsi</th>
+                                <th>Jumlah</th>
+                                <th>Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${paymentData.product}</td>
+                                <td>1</td>
+                                <td>Rp ${parseInt(paymentData.price).toLocaleString('id-ID')}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" class="invoice-total">Total:</td>
+                                <td class="invoice-total">Rp ${parseInt(paymentData.price).toLocaleString('id-ID')}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                    <div class="mt-4">
+                        <p>Terima kasih telah berbelanja di EonGenesis.id. Invoice ini merupakan bukti pembayaran yang sah.</p>
+                    </div>
+                `;
+                
+                invoiceContent.innerHTML = invoiceHtml;
+                
+                const invoiceModal = new bootstrap.Modal(document.getElementById('invoiceModal'));
+                invoiceModal.show();
             }
             
             // Event listener untuk form login
@@ -2431,9 +2966,23 @@
                     return;
                 }
                 
-                // Simpan data pembayaran
+                // Cek apakah pembayaran untuk produk yang sama sedang dalam proses
                 const payments = JSON.parse(localStorage.getItem('payments'));
-                payments.push({
+                const pendingPayment = payments.find(p => 
+                    p.username === currentUser.username && 
+                    p.product === productName && 
+                    p.status === 'pending'
+                );
+                
+                if (pendingPayment) {
+                    showAlert('Pembayaran Anda untuk produk ini sedang ditinjau oleh admin.', 'info');
+                    const paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                    paymentModal.hide();
+                    return;
+                }
+                
+                // Simpan data pembayaran
+                const paymentData = {
                     username: currentUser.username,
                     product: productName,
                     price: productPrice,
@@ -2441,8 +2990,9 @@
                     proof: URL.createObjectURL(proofPayment), // Simpan sebagai URL (hanya simulasi)
                     status: 'pending',
                     date: new Date().toISOString()
-                });
+                };
                 
+                payments.push(paymentData);
                 localStorage.setItem('payments', JSON.stringify(payments));
                 
                 // Tandai voucher sebagai digunakan jika ada
@@ -2520,13 +3070,33 @@
                             break;
                         case 'pdf':
                             if (materials.pdf && materials.pdf.length > 0) {
-                                // Buka PDF pertama sebagai contoh
-                                window.open(materials.pdf[0].file, '_blank');
+                                // Buka PDF pertama sebagai contoh (hanya view, tidak bisa download)
+                                const pdfWindow = window.open(materials.pdf[0].file, '_blank');
+                                // Nonaktifkan menu download (hanya simulasi, tidak sepenuhnya aman)
+                                setTimeout(() => {
+                                    if (pdfWindow && !pdfWindow.closed) {
+                                        try {
+                                            pdfWindow.document.addEventListener('contextmenu', e => e.preventDefault());
+                                        } catch (e) {
+                                            console.log('Tidak dapat menonaktifkan menu download');
+                                        }
+                                    }
+                                }, 1000);
                             } else {
                                 showAlert('Materi belum tersedia.', 'info');
                             }
                             break;
                     }
+                });
+            });
+            
+            // Event listener untuk tombol test
+            document.querySelectorAll('.take-test-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const testType = this.getAttribute('data-test-type');
+                    const productKey = this.getAttribute('data-product');
+                    
+                    showTest(testType, productKey);
                 });
             });
             
@@ -2553,64 +3123,38 @@
                 window.open(whatsappUrl, '_blank');
             });
             
-            // Event listener untuk download flyer
-            document.getElementById('downloadFlyer').addEventListener('click', function() {
-                // Simulasi download flyer
-                showAlert('Flyer affiliate berhasil didownload!', 'success');
-            });
-            
-            // Event listener untuk generate flyer
+            // Event listener untuk generate flyer Instagram Story
             document.getElementById('generateFlyer').addEventListener('click', function() {
                 const code = document.getElementById('flyerAffiliateCode').textContent;
+                document.getElementById('storyAffiliateCode').textContent = code;
                 
-                // Membuat canvas untuk flyer
-                const canvas = document.createElement('canvas');
-                canvas.width = 1080;
-                canvas.height = 1920;
-                const ctx = canvas.getContext('2d');
+                const flyerModal = new bootstrap.Modal(document.getElementById('flyerModal'));
+                flyerModal.show();
+            });
+            
+            // Event listener untuk download Instagram Story
+            document.getElementById('downloadStory').addEventListener('click', function() {
+                const storyElement = document.getElementById('instagramStory');
                 
-                // Background gradient
-                const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
-                gradient.addColorStop(0, '#4A2C2A');
-                gradient.addColorStop(1, '#A86F4C');
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, 1080, 1920);
+                html2canvas(storyElement).then(canvas => {
+                    const dataUrl = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.download = `eongenesis-story-${currentUser.affiliateCode}.png`;
+                    link.href = dataUrl;
+                    link.click();
+                    
+                    showAlert('Instagram Story berhasil didownload!', 'success');
+                });
+            });
+            
+            // Event listener untuk share Instagram Story
+            document.getElementById('shareStory').addEventListener('click', function() {
+                showAlert('Fitur berbagi ke Instagram Story akan membuka aplikasi Instagram. Pastikan Instagram terinstall di perangkat Anda.', 'info');
                 
-                // Logo
-                ctx.fillStyle = 'white';
-                ctx.font = 'bold 80px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('EG', 540, 300);
-                
-                // Title
-                ctx.font = 'bold 60px Arial';
-                ctx.fillText('EonGenesis.id', 540, 450);
-                
-                // Description
-                ctx.font = '30px Arial';
-                ctx.fillText('Kursus Sempoa Modern dengan', 540, 550);
-                ctx.fillText('Teknologi AR', 540, 600);
-                
-                // Affiliate code box
-                ctx.fillStyle = 'white';
-                ctx.fillRect(340, 700, 400, 100);
-                ctx.fillStyle = '#4A2C2A';
-                ctx.font = 'bold 40px Arial';
-                ctx.fillText(code, 540, 765);
-                
-                // Description
-                ctx.fillStyle = 'white';
-                ctx.font = '30px Arial';
-                ctx.fillText('Dapatkan diskon 10% dengan kode di atas', 540, 850);
-                
-                // Convert to image and download
-                const dataUrl = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.download = `flyer-affiliate-${code}.png`;
-                link.href = dataUrl;
-                link.click();
-                
-                showAlert('Flyer affiliate berhasil digenerate!', 'success');
+                // Simulasi share ke Instagram
+                setTimeout(() => {
+                    showAlert('Instagram Story siap dibagikan! Download gambar terlebih dahulu lalu unggah ke Instagram Story Anda.', 'success');
+                }, 2000);
             });
             
             // Event listener untuk simpan link
@@ -2681,6 +3225,66 @@
                 showAlert('Video tutorial berhasil disimpan!', 'success');
             });
             
+            // Event listener untuk simpan soal test
+            document.getElementById('saveTests').addEventListener('click', function() {
+                const tests = JSON.parse(localStorage.getItem('tests'));
+                
+                // Simpan pre-test
+                tests.pretest = [];
+                const pretestQuestions = document.querySelectorAll('.pretest-question');
+                
+                pretestQuestions.forEach(input => {
+                    const index = input.getAttribute('data-index');
+                    const question = input.value;
+                    
+                    if (question) {
+                        const options = [];
+                        const optionInputs = document.querySelectorAll(`.pretest-option[data-index="${index}"]`);
+                        
+                        optionInputs.forEach(optInput => {
+                            options.push(optInput.value);
+                        });
+                        
+                        const answer = parseInt(document.querySelector(`.pretest-answer[data-index="${index}"]`).value);
+                        
+                        tests.pretest.push({
+                            question: question,
+                            options: options,
+                            answer: answer
+                        });
+                    }
+                });
+                
+                // Simpan post-test
+                tests.posttest = [];
+                const posttestQuestions = document.querySelectorAll('.posttest-question');
+                
+                posttestQuestions.forEach(input => {
+                    const index = input.getAttribute('data-index');
+                    const question = input.value;
+                    
+                    if (question) {
+                        const options = [];
+                        const optionInputs = document.querySelectorAll(`.posttest-option[data-index="${index}"]`);
+                        
+                        optionInputs.forEach(optInput => {
+                            options.push(optInput.value);
+                        });
+                        
+                        const answer = parseInt(document.querySelector(`.posttest-answer[data-index="${index}"]`).value);
+                        
+                        tests.posttest.push({
+                            question: question,
+                            options: options,
+                            answer: answer
+                        });
+                    }
+                });
+                
+                localStorage.setItem('tests', JSON.stringify(tests));
+                showAlert('Soal test berhasil disimpan!', 'success');
+            });
+            
             // Event listener untuk lihat bukti pembayaran
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('view-payment')) {
@@ -2726,6 +3330,35 @@
                                 if (!users[userIndex].products.includes(productKey)) {
                                     users[userIndex].products.push(productKey);
                                     localStorage.setItem('users', JSON.stringify(users));
+                                    
+                                    // Jika user sedang login, update currentUser
+                                    if (currentUser && currentUser.username === users[userIndex].username) {
+                                        currentUser = users[userIndex];
+                                    }
+                                    
+                                    // Generate invoice
+                                    generateInvoice(payments[paymentIndex]);
+                                    
+                                    // Hitung komisi affiliate jika ada
+                                    const affiliatedBy = users[userIndex].affiliatedBy;
+                                    if (affiliatedBy) {
+                                        const affiliateUserIndex = users.findIndex(u => u.username === affiliatedBy);
+                                        if (affiliateUserIndex !== -1) {
+                                            if (!users[affiliateUserIndex].affiliateEarnings) {
+                                                users[affiliateUserIndex].affiliateEarnings = [];
+                                            }
+                                            
+                                            const commission = parseInt(payments[paymentIndex].price) * 0.1;
+                                            users[affiliateUserIndex].affiliateEarnings.push({
+                                                from: users[userIndex].username,
+                                                product: payments[paymentIndex].product,
+                                                amount: commission,
+                                                date: new Date().toISOString()
+                                            });
+                                            
+                                            localStorage.setItem('users', JSON.stringify(users));
+                                        }
+                                    }
                                 }
                             }
                             
@@ -2765,6 +3398,7 @@
                     localStorage.removeItem('vouchers');
                     localStorage.removeItem('links');
                     localStorage.removeItem('materials');
+                    localStorage.removeItem('tests');
                     
                     // Reset ke state awal
                     localStorage.setItem('users', JSON.stringify([
@@ -2790,6 +3424,10 @@
                         pdf: [],
                         video: []
                     }));
+                    localStorage.setItem('tests', JSON.stringify({
+                        pretest: [],
+                        posttest: []
+                    }));
                     
                     // Logout user jika sedang login
                     if (currentUser) {
@@ -2803,6 +3441,11 @@
                 } else {
                     showAlert('Password admin salah!', 'danger');
                 }
+            });
+            
+            // Event listener untuk print invoice
+            document.getElementById('printInvoice').addEventListener('click', function() {
+                window.print();
             });
             
             // Cek jika admin login (username = admin)
