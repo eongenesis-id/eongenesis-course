@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --nude: #E8D6C0;
@@ -20,6 +21,9 @@
             --earth: #A86F4C;
             --cream: #F8F4E9;
             --premium: #FFD700;
+            --beige: #F5F5DC;
+            --light-beige: #FAF8F1;
+            --medium-beige: #E4D5C7;
         }
         
         body {
@@ -707,7 +711,7 @@
         .instagram-story {
             width: 100%;
             height: 600px;
-            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            background: linear-gradient(135deg, var(--beige) 0%, var(--medium-beige) 100%);
             border-radius: 20px;
             position: relative;
             overflow: hidden;
@@ -716,7 +720,7 @@
         
         .story-content {
             padding: 40px;
-            color: white;
+            color: var(--dark-brown);
             text-align: center;
             position: relative;
             z-index: 2;
@@ -725,7 +729,7 @@
         .story-logo {
             width: 100px;
             height: 100px;
-            background: white;
+            background: var(--dark-brown);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -733,7 +737,7 @@
             margin: 0 auto 20px;
             font-weight: bold;
             font-size: 30px;
-            color: var(--dark-brown);
+            color: var(--nude);
         }
         
         .story-kids-image {
@@ -745,8 +749,8 @@
         }
         
         .story-affiliate-code {
-            background-color: white;
-            color: var(--dark-brown);
+            background-color: var(--dark-brown);
+            color: var(--nude);
             padding: 10px 20px;
             border-radius: 30px;
             font-weight: bold;
@@ -763,6 +767,7 @@
             text-align: center;
             font-weight: bold;
             font-size: 18px;
+            color: var(--dark-brown);
         }
         
         .invoice-container {
@@ -795,6 +800,32 @@
             text-align: right;
             font-weight: bold;
             font-size: 1.2rem;
+        }
+        
+        .beige-bg {
+            background-color: var(--beige);
+        }
+        
+        .light-beige-bg {
+            background-color: var(--light-beige);
+        }
+        
+        .medium-beige-bg {
+            background-color: var(--medium-beige);
+        }
+        
+        .beige-border {
+            border-color: var(--medium-beige);
+        }
+        
+        .beige-text {
+            color: var(--dark-brown);
+        }
+        
+        .file-format-warning {
+            font-size: 0.8rem;
+            color: #dc3545;
+            margin-top: 5px;
         }
         
         @media (max-width: 768px) {
@@ -1010,8 +1041,9 @@
                             </div>
                             
                             <div class="mt-3">
-                                <label for="proofPayment" class="form-label">Upload Bukti Pembayaran</label>
-                                <input type="file" class="form-control" id="proofPayment" required>
+                                <label for="proofPayment" class="form-label">Upload Bukti Pembayaran (Hanya JPG)</label>
+                                <input type="file" class="form-control" id="proofPayment" accept=".jpg,.jpeg" required>
+                                <div class="file-format-warning">Hanya file JPG yang diperbolehkan</div>
                             </div>
                         </div>
                     </div>
@@ -1109,6 +1141,9 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     <button type="button" class="btn btn-primary" id="printInvoice">Print Invoice</button>
+                    <button type="button" class="btn btn-success" id="downloadInvoice">
+                        <i class="fas fa-download me-2"></i> Download PDF
+                    </button>
                 </div>
             </div>
         </div>
@@ -1464,6 +1499,11 @@
                 <div class="material-item material-locked" id="material-ar">
                     <h4>Materi Augmented Reality</h4>
                     <p>Akses ke teknologi AR untuk pembelajaran sempoa yang interaktif dan menyenangkan.</p>
+                    <div class="material-access" style="display: none;">
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-success access-link-btn" data-product="ar">Akses Link</button>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Materi PDF -->
@@ -2084,6 +2124,14 @@
                                 badge.classList.remove('access-badge');
                                 badge.classList.add('paid-badge');
                             }
+                            
+                            // Tampilkan tombol akses link khusus untuk produk AR
+                            if (material === 'ar') {
+                                const accessSection = materialElement.querySelector('.material-access');
+                                if (accessSection) {
+                                    accessSection.style.display = 'block';
+                                }
+                            }
                         } else {
                             materialElement.classList.add('material-locked');
                             
@@ -2123,7 +2171,11 @@
                 buttons.forEach(button => {
                     const productKey = button.getAttribute('data-product-key');
                     if (products.includes(productKey)) {
-                        button.textContent = 'Akses Materi';
+                        if (productKey === 'ar') {
+                            button.textContent = 'Akses Link';
+                        } else {
+                            button.textContent = 'Akses Materi';
+                        }
                         button.classList.remove('btn-primary');
                         button.classList.add('btn-success');
                         button.setAttribute('data-bs-target', '#');
@@ -2608,7 +2660,7 @@
                     let score = 0;
                     const formData = new FormData(this);
                     
-                    testQuestions.forEach((question, index) => {
+                    testQuestions.forEach((question, index) {
                         const userAnswer = parseInt(formData.get(`question${index}`));
                         if (userAnswer === question.answer) {
                             score++;
@@ -2880,6 +2932,13 @@
                     
                     // Cek apakah produk sudah dibeli
                     if (currentUser.products && currentUser.products.includes(productKey)) {
+                        // Jika produk AR, arahkan ke link AR
+                        if (productKey === 'ar') {
+                            const links = JSON.parse(localStorage.getItem('links'));
+                            window.open(links.ar, '_blank');
+                            return;
+                        }
+                        
                         // Redirect ke katalog
                         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                         document.querySelector('.nav-link[data-bs-target="catalog"]').classList.add('active');
@@ -2963,6 +3022,13 @@
                 
                 if (!proofPayment) {
                     showAlert('Harap upload bukti pembayaran.', 'warning');
+                    return;
+                }
+                
+                // Validasi format file
+                const allowedExtensions = /(\.jpg|\.jpeg)$/i;
+                if (!allowedExtensions.exec(proofPayment.name)) {
+                    showAlert('Hanya file JPG yang diperbolehkan.', 'warning');
                     return;
                 }
                 
@@ -3064,10 +3130,6 @@
                                 showAlert('Materi belum tersedia.', 'info');
                             }
                             break;
-                        case 'ar':
-                            const links = JSON.parse(localStorage.getItem('links'));
-                            window.open(links.ar, '_blank');
-                            break;
                         case 'pdf':
                             if (materials.pdf && materials.pdf.length > 0) {
                                 // Buka PDF pertama sebagai contoh (hanya view, tidak bisa download)
@@ -3088,6 +3150,29 @@
                             break;
                     }
                 });
+            });
+            
+            // Event listener untuk tombol akses link (khusus AR)
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('access-link-btn')) {
+                    e.preventDefault();
+                    
+                    const productKey = e.target.getAttribute('data-product');
+                    
+                    if (!currentUser) {
+                        showAlert('Silakan login terlebih dahulu untuk mengakses link.', 'warning');
+                        return;
+                    }
+                    
+                    if (!currentUser.products || !currentUser.products.includes(productKey)) {
+                        showAlert('Anda belum membeli produk ini. Silakan beli terlebih dahulu.', 'warning');
+                        return;
+                    }
+                    
+                    // Redirect ke link AR
+                    const links = JSON.parse(localStorage.getItem('links'));
+                    window.open(links.ar, '_blank');
+                }
             });
             
             // Event listener untuk tombol test
@@ -3446,6 +3531,43 @@
             // Event listener untuk print invoice
             document.getElementById('printInvoice').addEventListener('click', function() {
                 window.print();
+            });
+            
+            // Event listener untuk download invoice PDF
+            document.getElementById('downloadInvoice').addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Ambil konten invoice
+                const invoiceContent = document.getElementById('invoiceContent');
+                
+                // Generate nama file sesuai format: user_tanggal transaksi_jenis produk
+                const paymentData = JSON.parse(localStorage.getItem('payments')).find(p => 
+                    p.username === currentUser.username && p.status === 'verified'
+                );
+                
+                if (paymentData) {
+                    const userName = currentUser.username;
+                    const transactionDate = new Date(paymentData.date).toLocaleDateString('id-ID').replace(/\//g, '-');
+                    const productName = paymentData.product.replace(/\s+/g, '_');
+                    
+                    const fileName = `${userName}_${transactionDate}_${productName}.pdf`;
+                    
+                    // Convert HTML to PDF
+                    doc.html(invoiceContent, {
+                        callback: function(doc) {
+                            doc.save(fileName);
+                        },
+                        margin: [10, 10, 10, 10],
+                        autoPaging: 'text',
+                        x: 0,
+                        y: 0,
+                        width: 190,
+                        windowWidth: invoiceContent.scrollWidth
+                    });
+                } else {
+                    showAlert('Tidak ada data pembayaran yang terverifikasi.', 'warning');
+                }
             });
             
             // Cek jika admin login (username = admin)
